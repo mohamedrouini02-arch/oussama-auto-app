@@ -3,10 +3,26 @@
 -- =================================================================
 -- Run this ENTIRE script in Supabase SQL Editor (one go).
 -- It creates all tables, functions, policies, triggers, and storage.
+-- WARNING: This will DROP and recreate all tables (clean slate).
 -- =================================================================
 
 -- Enable UUID extension
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+-- =================================================================
+-- DROP EXISTING TABLES (clean slate - order matters for foreign keys)
+-- =================================================================
+DROP TABLE IF EXISTS public.attendance_logs CASCADE;
+DROP TABLE IF EXISTS public.employees CASCADE;
+DROP TABLE IF EXISTS public.financial_summaries CASCADE;
+DROP TABLE IF EXISTS public.documents CASCADE;
+DROP TABLE IF EXISTS public.settings CASCADE;
+DROP TABLE IF EXISTS public.currency_exchange_rates CASCADE;
+DROP TABLE IF EXISTS public.financial_transactions CASCADE;
+DROP TABLE IF EXISTS public.shipping_forms CASCADE;
+DROP TABLE IF EXISTS public.car_inventory CASCADE;
+DROP TABLE IF EXISTS public.orders CASCADE;
+DROP TABLE IF EXISTS public.profiles CASCADE;
 
 -- =================================================================
 -- 1. PROFILES (Extends Supabase Auth)
