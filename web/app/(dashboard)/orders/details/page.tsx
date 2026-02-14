@@ -78,15 +78,19 @@ function OrdersDetailsContent() {
             if (error) throw error
             setOrder(data)
 
-            // Fetch assigned car
-            const { data: carData } = await supabase
-                .from('car_inventory')
-                .select('*')
-                .eq('assigned_to_order', id)
-                .single()
+            // Fetch assigned car (may not exist if assigned_to_order column is missing)
+            try {
+                const { data: carData } = await supabase
+                    .from('car_inventory')
+                    .select('*')
+                    .eq('assigned_to_order', id)
+                    .single()
 
-            if (carData) {
-                setAssignedCar(carData)
+                if (carData) {
+                    setAssignedCar(carData)
+                }
+            } catch {
+                // assigned_to_order column may not exist in this db
             }
         } catch (error) {
             console.error('Error fetching order:', error)

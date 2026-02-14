@@ -29,7 +29,7 @@ export default function InventoryPage() {
         try {
             const { data, error } = await supabase
                 .from('car_inventory')
-                .select('*, orders!assigned_car_id(id, customer_name, reference_number, status)')
+                .select('*')
                 .order('created_at', { ascending: false })
 
             if (error) throw error
