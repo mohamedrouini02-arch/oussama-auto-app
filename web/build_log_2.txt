@@ -1,0 +1,22 @@
+
+> web@0.1.2 build
+> next build
+
+ ΓÜá Warning: Next.js inferred your workspace root, but it may not be correct.
+ We detected multiple lockfiles and selected the directory of D:\Wahid-auto\APP\wahid-auto\package-lock.json as the root directory.
+ To silence this warning, set `turbopack.root` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
+   See https://nextjs.org/docs/app/api-reference/config/next-config-js/turbopack#root-directory for more information.
+ Detected additional lockfiles: 
+   * D:\Wahid-auto\APP\wahid-auto\web\package-lock.json
+
+   Γû▓ Next.js 16.0.10 (Turbopack)
+   - Environments: .env.local
+
+   Creating an optimized production build ...
+ Γ£ô Compiled successfully in 5.3s
+   Running TypeScript ...
+   Collecting page data using 15 workers ...
+
+> Build error occurred
+Error: Page "/finance/[id]" is missing "generateStaticParams()" so it cannot be used with "output: export" config.
+    at ignore-listed frames

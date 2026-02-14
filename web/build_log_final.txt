@@ -1,0 +1,307 @@
+
+> web@0.1.0 build
+> next build
+
+ ΓÜá Warning: Next.js inferred your workspace root, but it may not be correct.
+ We detected multiple lockfiles and selected the directory of D:\Wahid-auto\APP\wahid-auto\package-lock.json as the root directory.
+ To silence this warning, set `turbopack.root` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
+   See https://nextjs.org/docs/app/api-reference/config/next-config-js/turbopack#root-directory for more information.
+ Detected additional lockfiles: 
+   * D:\Wahid-auto\APP\wahid-auto\web\package-lock.json
+
+   Γû▓ Next.js 16.0.3 (Turbopack)
+   - Environments: .env.local
+
+   Creating an optimized production build ...
+
+> Build error occurred
+Error: Turbopack build failed with 3 errors:
+./web/app/(dashboard)/orders/[id]/page.tsx:72:14
+Parsing ecmascript source code failed
+  70 |
+  71 |
+> 72 | if (loading) return <div className="p-8">Loading...</div>
+     |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  73 | if (!order) return null
+  74 |
+  75 | return (
+
+Return statement is not allowed here
+
+
+./web/app/(dashboard)/orders/[id]/page.tsx:73:13
+Parsing ecmascript source code failed
+  71 |
+  72 | if (loading) return <div className="p-8">Loading...</div>
+> 73 | if (!order) return null
+     |             ^^^^^^^^^^^
+  74 |
+  75 | return (
+  76 |     <div className="p-8">
+
+Return statement is not allowed here
+
+
+./web/app/(dashboard)/orders/[id]/page.tsx:75:1
+Parsing ecmascript source code failed
+   73 | if (!order) return null
+   74 |
+>  75 | return (
+      | ^^^^^^^^
+>  76 |     <div className="p-8">
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  77 |         <div className="mb-8">
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  78 |             <Link href="/orders" className="text-gray-500 hover:text-gray-900 flex items-center gap-2 mb-4">
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  79 |                 <ArrowLeft className="w-4 h-4" />
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  80 |                 Back to Orders
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  81 |             </Link>
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  82 |             <div className="flex justify-between items-start">
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  83 |                 <div>
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  84 |                     <h1 className="text-3xl font-bold text-gray-900 mb-2">Order #{order.reference_number}</h1>
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  85 |                     <p className="text-gray-500">Created on {format(new Date(order.created_at!), 'MMMM d, yyyy')}</p>
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  86 |                 </div>
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  87 |                 <div className="flex gap-2">
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  88 |                     <button
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  89 |                         onClick={() => updateStatus('confirmed')}
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  90 |                         className="px-4 py-2 bg-blue-50 text-blue-700 rounded-lg font-medium hover:bg-blue-100 transition"
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  91 |                     >
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  92 |                         Confirm
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  93 |                     </button>
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  94 |                     <button
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  95 |                         onClick={() => updateStatus('completed')}
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  96 |                         className="px-4 py-2 bg-green-50 text-green-700 rounded-lg font-medium hover:bg-green-100 transition"
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  97 |                     >
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  98 |                         Complete
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  99 |                     </button>
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 100 |                     <button
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 101 |                         onClick={() => updateStatus('cancelled')}
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 102 |                         className="px-4 py-2 bg-red-50 text-red-700 rounded-lg font-medium hover:bg-red-100 transition"
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 103 |                     >
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 104 |                         Cancel
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 105 |                     </button>
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 106 |                     <button
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 107 |                         onClick={handleDelete}
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 108 |                         className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 transition flex items-center gap-2"
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 109 |                     >
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 110 |                         <Trash2 className="w-4 h-4" />
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 111 |                         Delete
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 112 |                     </button>
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 113 |                 </div>
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 114 |             </div>
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 115 |         </div>
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 116 |
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 117 |         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 118 |             {/* Customer Info */}
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 119 |             <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 120 |                 <h2 className="text-lg font-bold mb-4 flex items-center gap-2">
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 121 |                     <User className="w-5 h-5 text-gray-400" />
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 122 |                     Customer Details
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 123 |                 </h2>
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 124 |                 <div className="space-y-4">
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 125 |                     <div>
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 126 |                         <label className="text-sm text-gray-500">Full Name</label>
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 127 |                         <p className="font-medium">{order.customer_name}</p>
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 128 |                     </div>
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 129 |                     <div className="flex items-center gap-3">
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 130 |                         <Phone className="w-4 h-4 text-gray-400" />
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 131 |                         <span>{order.customer_phone}</span>
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 132 |                         <div className="flex gap-1 ml-2">
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 133 |                             <a
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 134 |                                 href={`tel:${order.customer_phone}`}
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 135 |                                 className="p-1 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-full transition"
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 136 |                                 title="Call Customer"
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 137 |                             >
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 138 |                                 <Phone className="w-3.5 h-3.5" />
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 139 |                             </a>
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 140 |                             <a
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 141 |                                 href={`https://wa.me/${order.customer_phone.replace(/\D/g, '')}`}
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 142 |                                 target="_blank"
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 143 |                                 rel="noopener noreferrer"
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 144 |                                 className="p-1 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-full transition"
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 145 |                                 title="WhatsApp"
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 146 |                             >
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 147 |                                 <MessageCircle className="w-3.5 h-3.5" />
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 148 |                             </a>
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 149 |                         </div>
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 150 |                     </div>
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 151 |                     {order.customer_email && (
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 152 |                         <div className="flex items-center gap-3">
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 153 |                             <Mail className="w-4 h-4 text-gray-400" />
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 154 |                             <span>{order.customer_email}</span>
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 155 |                         </div>
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 156 |                     )}
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 157 |                     {order.customer_wilaya && (
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 158 |                         <div className="flex items-center gap-3">
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 159 |                             <MapPin className="w-4 h-4 text-gray-400" />
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 160 |                             <span>{order.customer_wilaya}</span>
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 161 |                         </div>
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 162 |                     )}
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 163 |                 </div>
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 164 |             </div>
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 165 |
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 166 |             {/* Vehicle Info */}
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 167 |             <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 168 |                 <h2 className="text-lg font-bold mb-4 flex items-center gap-2">
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 169 |                     <Car className="w-5 h-5 text-gray-400" />
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 170 |                     Vehicle Details
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 171 |                 </h2>
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 172 |                 <div className="space-y-4">
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 173 |                     <div>
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 174 |                         <label className="text-sm text-gray-500">Brand & Model</label>
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 175 |                         <p className="font-medium text-lg">{order.car_brand} {order.car_model}</p>
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 176 |                     </div>
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 177 |                     {/* Add more vehicle details if available in JSON or other fields */}
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 178 |                 </div>
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 179 |             </div>
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 180 |
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 181 |             {/* Status & Timeline */}
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 182 |             <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 183 |                 <h2 className="text-lg font-bold mb-4 flex items-center gap-2">
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 184 |                     <Clock className="w-5 h-5 text-gray-400" />
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 185 |                     Order Status
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 186 |                 </h2>
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 187 |                 <div className="flex items-center gap-3 mb-6">
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 188 |                     {order.status === 'completed' ? <CheckCircle className="w-8 h-8 text-green-500" /> :
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 189 |                         order.status === 'cancelled' ? <XCircle className="w-8 h-8 text-red-500" /> :
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 190 |                             <Clock className="w-8 h-8 text-yellow-500" />}
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 191 |                     <div>
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 192 |                         <p className="font-bold capitalize text-lg">{order.status || 'Pending'}</p>
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 193 |                         <p className="text-sm text-gray-500">Last updated {order.updated_at ? format(new Date(order.updated_at), 'MMM d, HH:mm') : '-'}</p>
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 194 |                     </div>
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 195 |                 </div>
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 196 |             </div>
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 197 |         </div>
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 198 |     </div>
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 199 | )
+      | ^^
+  200 | }
+  201 |
+
+Return statement is not allowed here
+
+
+    at <unknown> (./web/app/(dashboard)/orders/[id]/page.tsx:72:14)
+    at <unknown> (./web/app/(dashboard)/orders/[id]/page.tsx:73:13)
+    at <unknown> (./web/app/(dashboard)/orders/[id]/page.tsx:75:1)

@@ -1,0 +1,42 @@
+app/(dashboard)/finance/[id]/edit/page.tsx(62,40): error TS2339: Property 'description' does not exist on type 'never'.
+app/(dashboard)/finance/[id]/edit/page.tsx(94,32): error TS2339: Property 'type' does not exist on type 'never'.
+app/(dashboard)/finance/[id]/edit/page.tsx(95,36): error TS2339: Property 'category' does not exist on type 'never'.
+app/(dashboard)/finance/[id]/edit/page.tsx(97,32): error TS2339: Property 'transaction_date' does not exist on type 'never'.
+app/(dashboard)/finance/[id]/edit/page.tsx(98,36): error TS2339: Property 'currency' does not exist on type 'never'.
+app/(dashboard)/finance/[id]/edit/page.tsx(99,34): error TS2339: Property 'amount' does not exist on type 'never'.
+app/(dashboard)/finance/[id]/edit/page.tsx(100,38): error TS2339: Property 'paid_amount' does not exist on type 'never'.
+app/(dashboard)/finance/[id]/edit/page.tsx(101,41): error TS2339: Property 'payment_status' does not exist on type 'never'.
+app/(dashboard)/finance/[id]/edit/page.tsx(102,41): error TS2339: Property 'payment_method' does not exist on type 'never'.
+app/(dashboard)/finance/[id]/edit/page.tsx(103,36): error TS2339: Property 'car_model' does not exist on type 'never'.
+app/(dashboard)/finance/[id]/edit/page.tsx(104,35): error TS2339: Property 'car_year' does not exist on type 'never'.
+app/(dashboard)/finance/[id]/edit/page.tsx(105,34): error TS2339: Property 'car_vin' does not exist on type 'never'.
+app/(dashboard)/finance/[id]/edit/page.tsx(107,44): error TS2339: Property 'seller_commission' does not exist on type 'never'.
+app/(dashboard)/finance/[id]/edit/page.tsx(109,43): error TS2339: Property 'buyer_commission' does not exist on type 'never'.
+app/(dashboard)/finance/[id]/edit/page.tsx(110,44): error TS2339: Property 'bureau_commission' does not exist on type 'never'.
+app/(dashboard)/finance/[id]/edit/page.tsx(186,25): error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+app/(dashboard)/inventory/[id]/page.tsx(59,25): error TS2345: Argument of type '{ status: string; }' is not assignable to parameter of type 'never'.
+app/(dashboard)/inventory/new/page.tsx(124,68): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(values: never, options?: { count?: "exact" | "planned" | "estimated" | undefined; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "car_inventory", never, "POST">', gave the following error.
+    Argument of type '{ brand: string; model: string; year: number; mileage: number; selling_price: number; location: string; color: string; vin: string; currency: string; status: string; photos_urls: string[]; video_url: string | null; }' is not assignable to parameter of type 'never'.
+  Overload 2 of 2, '(values: never[], options?: { count?: "exact" | "planned" | "estimated" | undefined; defaultToNull?: boolean | undefined; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "car_inventory", never, "POST">', gave the following error.
+    Object literal may only specify known properties, and 'brand' does not exist in type 'never[]'.
+app/(dashboard)/orders/[id]/page.tsx(47,25): error TS2345: Argument of type '{ status: string; }' is not assignable to parameter of type 'never'.
+app/(dashboard)/orders/new/page.tsx(32,61): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(values: never, options?: { count?: "exact" | "planned" | "estimated" | undefined; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "orders", never, "POST">', gave the following error.
+    Argument of type '{ reference_number: string; customer_name: string; customer_phone: string; customer_email: string; customer_wilaya: string; car_brand: string; car_model: string; status: string; order_data: { ...; }; }' is not assignable to parameter of type 'never'.
+  Overload 2 of 2, '(values: never[], options?: { count?: "exact" | "planned" | "estimated" | undefined; defaultToNull?: boolean | undefined; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "orders", never, "POST">', gave the following error.
+    Object literal may only specify known properties, and 'reference_number' does not exist in type 'never[]'.
+app/(dashboard)/page.tsx(25,73): error TS2339: Property 'amount' does not exist on type 'never'.
+app/(dashboard)/shipping/[id]/page.tsx(59,25): error TS2345: Argument of type '{ status: string; }' is not assignable to parameter of type 'never'.
+app/(dashboard)/shipping/new/page.tsx(27,69): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(values: never, options?: { count?: "exact" | "planned" | "estimated" | undefined; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "shipping_forms", never, "POST">', gave the following error.
+    Argument of type '{ customer_name: string; customer_phone: string; customer_email: string; customer_address: string; passport_number: string; vehicle_model: string; vin: string; status: string; }' is not assignable to parameter of type 'never'.
+  Overload 2 of 2, '(values: never[], options?: { count?: "exact" | "planned" | "estimated" | undefined; defaultToNull?: boolean | undefined; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "shipping_forms", never, "POST">', gave the following error.
+    Object literal may only specify known properties, and 'customer_name' does not exist in type 'never[]'.
+app/test-inventory/page.tsx(67,74): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(values: never, options?: { count?: "exact" | "planned" | "estimated" | undefined; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "car_inventory", never, "POST">', gave the following error.
+    Argument of type '{ brand: string; model: string; year: number; location: string; selling_price: number; currency: string; status: string; }' is not assignable to parameter of type 'never'.
+  Overload 2 of 2, '(values: never[], options?: { count?: "exact" | "planned" | "estimated" | undefined; defaultToNull?: boolean | undefined; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "car_inventory", never, "POST">', gave the following error.
+    Object literal may only specify known properties, and 'brand' does not exist in type 'never[]'.
+app/test-inventory/page.tsx(80,51): error TS2339: Property 'id' does not exist on type 'never'.
+app/test-inventory/page.tsx(83,105): error TS2339: Property 'id' does not exist on type 'never'.

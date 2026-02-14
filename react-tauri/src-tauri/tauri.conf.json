@@ -1,0 +1,44 @@
+{
+    "$schema": "https://schema.tauri.app/config/2",
+    "productName": "WahidAuto",
+    "version": "0.1.0",
+    "identifier": "com.wahidauto.desktop",
+    "build": {
+        "beforeDevCommand": "npm run dev",
+        "beforeBuildCommand": "npm run build",
+        "devUrl": "http://localhost:1420",
+        "frontendDist": "../dist"
+    },
+    "bundle": {
+        "active": true,
+        "targets": [
+            "nsis",
+            "msi"
+        ],
+        "icon": [
+            "icons/icon.ico"
+        ],
+        "publisher": "Wahid Auto"
+    },
+    "app": {
+        "windows": [
+            {
+                "title": "Wahid Auto",
+                "width": 1200,
+                "height": 800,
+                "label": "main"
+            }
+        ],
+        "security": {
+            "csp": "default-src 'self' 'unsafe-inline' 'unsafe-eval' ipc: http://ipc.localhost asset: https://asset.localhost; connect-src 'self' ipc: http://ipc.localhost ws://localhost:1420 https://qtgvmqdvghvijfbacnza.supabase.co https://*.supabase.co; img-src 'self' asset: https://asset.localhost data: https: blob:; media-src 'self' asset: https://asset.localhost https: blob:; frame-src 'self' asset: https: data: blob:; object-src 'self' asset: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; worker-src 'self' blob:",
+            "capabilities": [
+                "default"
+            ],
+            "assetProtocol": {
+                "enable": true,
+                "scope": []
+            }
+        },
+        "withGlobalTauri": true
+    }
+}
