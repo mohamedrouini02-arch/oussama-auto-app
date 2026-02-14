@@ -59,7 +59,7 @@ export default function OrdersPage() {
         try {
             const { data, error } = await supabase
                 .from('orders')
-                .select('*, car_inventory(brand, model, year, vin, currency, selling_price)')
+                .select('*')
                 .order('created_at', { ascending: false })
 
             if (error) throw error
