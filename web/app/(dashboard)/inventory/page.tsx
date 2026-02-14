@@ -211,7 +211,7 @@ export default function InventoryPage() {
                                         <>
                                             <div className="col-span-2 bg-blue-50 dark:bg-blue-900/20 p-2 rounded-lg mb-1 border border-blue-100 dark:border-blue-900/30">
                                                 <div className="text-xs text-blue-500 font-bold uppercase mb-1">Assigned Order</div>
-                                                <Link href={`/orders/${(car as any).orders?.id || car.assigned_to_order}`} className="text-sm font-bold text-blue-700 dark:text-blue-400 hover:underline block truncate">
+                                                <Link href={`/orders/details?id=${(car as any).orders?.id || car.assigned_to_order}`} className="text-sm font-bold text-blue-700 dark:text-blue-400 hover:underline block truncate">
                                                     {(car as any).orders?.customer_name || 'View Order'}
                                                 </Link>
                                                 <div className="text-xs text-blue-600 dark:text-blue-500">{(car as any).orders?.reference_number}</div>

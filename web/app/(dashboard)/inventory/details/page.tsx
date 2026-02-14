@@ -313,7 +313,7 @@ function CarDetailsContent() {
                                     <p className="font-mono text-gray-700 dark:text-gray-300">#{assignedOrder.reference_number}</p>
                                 </div>
                                 <Link
-                                    href={`/orders/${assignedOrder.id}`}
+                                    href={`/orders/details?id=${assignedOrder.id}`}
                                     className="block w-full text-center py-2 bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/30 transition font-medium mt-2"
                                 >
                                     View Order
