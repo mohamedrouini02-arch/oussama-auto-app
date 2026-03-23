@@ -571,6 +571,174 @@ export interface Database {
                     added_by?: string | null
                 }
             }
+            website_cars: {
+                Row: {
+                    id: string
+                    slug: string
+                    brand: string
+                    brand_ar: string
+                    brand_fr: string
+                    model: string
+                    model_ar: string
+                    model_fr: string
+                    year: number
+                    end_year: number | null
+                    description_ar: string | null
+                    description_fr: string | null
+                    price_min: number
+                    price_max: number
+                    image: string | null
+                    images: string[] | null
+                    engine: string | null
+                    engine_fr: string | null
+                    transmission: string | null
+                    transmission_fr: string | null
+                    fuel_type: string | null
+                    fuel_type_fr: string | null
+                    seats: number | null
+                    features: string[] | null
+                    features_fr: string[] | null
+                    colors: string[] | null
+                    colors_fr: string[] | null
+                    category: string | null
+                    is_popular: boolean
+                    is_active: boolean
+                    origin: string
+                    sort_order: number
+                    created_at: string
+                    updated_at: string
+                }
+                Insert: {
+                    id?: string
+                    slug: string
+                    brand: string
+                    brand_ar?: string
+                    brand_fr?: string
+                    model: string
+                    model_ar?: string
+                    model_fr?: string
+                    year: number
+                    end_year?: number | null
+                    description_ar?: string | null
+                    description_fr?: string | null
+                    price_min: number
+                    price_max: number
+                    image?: string | null
+                    images?: string[] | null
+                    engine?: string | null
+                    engine_fr?: string | null
+                    transmission?: string | null
+                    transmission_fr?: string | null
+                    fuel_type?: string | null
+                    fuel_type_fr?: string | null
+                    seats?: number | null
+                    features?: string[] | null
+                    features_fr?: string[] | null
+                    colors?: string[] | null
+                    colors_fr?: string[] | null
+                    category?: string | null
+                    is_popular?: boolean
+                    is_active?: boolean
+                    origin?: string
+                    sort_order?: number
+                    created_at?: string
+                    updated_at?: string
+                }
+                Update: {
+                    id?: string
+                    slug?: string
+                    brand?: string
+                    brand_ar?: string
+                    brand_fr?: string
+                    model?: string
+                    model_ar?: string
+                    model_fr?: string
+                    year?: number
+                    end_year?: number | null
+                    description_ar?: string | null
+                    description_fr?: string | null
+                    price_min?: number
+                    price_max?: number
+                    image?: string | null
+                    images?: string[] | null
+                    engine?: string | null
+                    engine_fr?: string | null
+                    transmission?: string | null
+                    transmission_fr?: string | null
+                    fuel_type?: string | null
+                    fuel_type_fr?: string | null
+                    seats?: number | null
+                    features?: string[] | null
+                    features_fr?: string[] | null
+                    colors?: string[] | null
+                    colors_fr?: string[] | null
+                    category?: string | null
+                    is_popular?: boolean
+                    is_active?: boolean
+                    origin?: string
+                    sort_order?: number
+                    created_at?: string
+                    updated_at?: string
+                }
+            }
+            website_content: {
+                Row: {
+                    id: string
+                    section: string
+                    content: Json
+                    created_at: string
+                    updated_at: string
+                }
+                Insert: {
+                    id?: string
+                    section: string
+                    content?: Json
+                    created_at?: string
+                    updated_at?: string
+                }
+                Update: {
+                    id?: string
+                    section?: string
+                    content?: Json
+                    created_at?: string
+                    updated_at?: string
+                }
+            }
+            website_media: {
+                Row: {
+                    id: string
+                    name: string
+                    file_path: string
+                    file_url: string
+                    file_type: string | null
+                    file_size: number | null
+                    alt_text: string | null
+                    category: string
+                    created_at: string
+                }
+                Insert: {
+                    id?: string
+                    name: string
+                    file_path: string
+                    file_url: string
+                    file_type?: string | null
+                    file_size?: number | null
+                    alt_text?: string | null
+                    category?: string
+                    created_at?: string
+                }
+                Update: {
+                    id?: string
+                    name?: string
+                    file_path?: string
+                    file_url?: string
+                    file_type?: string | null
+                    file_size?: number | null
+                    alt_text?: string | null
+                    category?: string
+                    created_at?: string
+                }
+            }
         }
     }
 }
