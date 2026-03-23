@@ -3,7 +3,7 @@
 import { useUserRole } from '@/hooks/useUserRole'
 import { supabase } from '@/lib/supabase'
 import { clsx } from 'clsx'
-import { Car, DollarSign, LayoutDashboard, LogOut, ShoppingCart, Truck, Users, X } from 'lucide-react'
+import { Car, DollarSign, Globe, LayoutDashboard, LogOut, ShoppingCart, Truck, Users, X } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
@@ -30,6 +30,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
         { name: t.common.finance, href: '/finance', icon: DollarSign },
         { name: t.common.shipping, href: '/shipping', icon: Truck },
         { name: t.common.attendance, href: '/attendance', icon: Users },
+        { name: t.common.website, href: '/website', icon: Globe },
     ]
 
     const handleLogout = async () => {
@@ -87,6 +88,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                         {navigation.filter(item => {
                             if (item.href === '/finance') return role === 'admin'
                             if (item.href === '/attendance') return role === 'admin'
+                            if (item.href === '/website') return role === 'admin'
                             return true
                         }).map((item) => {
                             const isActive = pathname === item.href
