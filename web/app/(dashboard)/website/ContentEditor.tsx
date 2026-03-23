@@ -28,11 +28,10 @@ export default function ContentEditor({ t, dir }: ContentEditorProps) {
     async function fetchContent() {
         setLoading(true)
         try {
-            const [heroRes, aboutRes, contactRes] = await Promise.all([
-                supabase.from('website_content').select('content').eq('section', 'hero').single(),
-                supabase.from('website_content').select('content').eq('section', 'about').single(),
-                supabase.from('website_content').select('content').eq('section', 'contact').single(),
-            ])
+            const heroRes = await supabase.from('website_content').select('content').eq('section', 'hero').single()
+            const aboutRes = await supabase.from('website_content').select('content').eq('section', 'about').single()
+            const contactRes = await supabase.from('website_content').select('content').eq('section', 'contact').single()
+
             if (heroRes.data) setHero(heroRes.data.content as ContentSection)
             if (aboutRes.data) setAbout(aboutRes.data.content as ContentSection)
             if (contactRes.data) setContact(contactRes.data.content as ContentSection)
