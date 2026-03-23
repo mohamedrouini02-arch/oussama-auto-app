@@ -73,6 +73,10 @@ const initialForm: CarForm = {
     is_active: true,
 }
 
+export function generateStaticParams() {
+    return []
+}
+
 export default function CarFormPage() {
     const router = useRouter()
     const params = useParams()
