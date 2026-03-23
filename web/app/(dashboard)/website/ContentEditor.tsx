@@ -1,6 +1,6 @@
 'use client'
 
-import { supabase } from '@/lib/supabase'
+import { cmsClient as supabase } from '@/lib/cms-client'
 import { CheckCircle, Loader2, Mail, MapPin, Phone, Save, Sparkles } from 'lucide-react'
 import { useEffect, useState } from 'react'
 

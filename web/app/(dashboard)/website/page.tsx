@@ -1,7 +1,7 @@
 'use client'
 
 import { useLanguage } from '@/context/LanguageContext'
-import { supabase } from '@/lib/supabase'
+import { cmsClient as supabase } from '@/lib/cms-client'
 import { Car, Edit2, Eye, EyeOff, Globe, Image, Pencil, Plus, Search, Star, Trash2, Type } from 'lucide-react'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'

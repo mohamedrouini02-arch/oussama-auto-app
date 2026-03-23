@@ -1,7 +1,7 @@
 'use client'
 
 import { useLanguage } from '@/context/LanguageContext'
-import { supabase } from '@/lib/supabase'
+import { cmsClient as supabase } from '@/lib/cms-client'
 import { ArrowLeft, Loader2, Plus, Save, Trash2, Upload, X } from 'lucide-react'
 import Link from 'next/link'
 import { useParams, useRouter } from 'next/navigation'
