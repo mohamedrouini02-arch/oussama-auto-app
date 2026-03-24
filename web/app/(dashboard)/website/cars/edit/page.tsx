@@ -433,7 +433,7 @@ function CarFormContent() {
                         <div className="flex items-center gap-4">
                             {form.image && (
                                 <div className="w-24 h-16 rounded-lg overflow-hidden bg-gray-100 dark:bg-slate-700 flex-shrink-0">
-                                    <img src={form.image} alt="" className="w-full h-full object-cover" />
+                                    <img src={form.image.startsWith('http') ? form.image : `https://oussamaauto.com${form.image.startsWith('/') ? form.image : `/${form.image}`}`} alt="" className="w-full h-full object-cover" />
                                 </div>
                             )}
                             <label className="flex items-center gap-2 px-4 py-2.5 bg-gray-100 dark:bg-slate-700 rounded-xl cursor-pointer hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors text-sm text-gray-700 dark:text-gray-300">
@@ -452,7 +452,7 @@ function CarFormContent() {
                         <div className="flex flex-wrap gap-3 mb-3">
                             {form.images.map((img: string, i: number) => (
                                 <div key={i} className="relative w-20 h-14 rounded-lg overflow-hidden bg-gray-100 dark:bg-slate-700 group">
-                                    <img src={img} alt="" className="w-full h-full object-cover" />
+                                    <img src={img.startsWith('http') ? img : `https://oussamaauto.com${img.startsWith('/') ? img : `/${img}`}`} alt="" className="w-full h-full object-cover" />
                                     <button
                                         type="button"
                                         onClick={() => removeGalleryImage(i)}

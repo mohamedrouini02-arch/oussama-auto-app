@@ -250,7 +250,7 @@ export default function WebsitePage() {
                                                     <div className="flex items-center gap-3">
                                                         <div className="w-12 h-9 rounded-lg bg-gray-100 dark:bg-slate-700 overflow-hidden flex-shrink-0">
                                                             {car.image && (
-                                                                <img src={car.image} alt="" className="w-full h-full object-cover" />
+                                                                <img src={car.image.startsWith('http') ? car.image : `https://oussamaauto.com${car.image.startsWith('/') ? car.image : `/${car.image}`}`} alt="" className="w-full h-full object-cover" />
                                                             )}
                                                         </div>
                                                         <span className="font-semibold text-gray-900 dark:text-white text-sm">{dir === 'rtl' ? car.brand_ar : car.brand}</span>
