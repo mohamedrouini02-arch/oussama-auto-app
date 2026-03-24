@@ -172,7 +172,7 @@ export default function WebsitePage() {
                             </select>
                         </div>
                         <Link
-                            href="/website/cars/new"
+                            href="/website/cars/edit?id=new"
                             className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-xl text-sm font-medium shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/40 transition-all"
                         >
                             <Plus className="w-4 h-4" />
@@ -290,7 +290,7 @@ export default function WebsitePage() {
                                                 <td className="px-5 py-4">
                                                     <div className="flex items-center justify-end gap-1">
                                                         <Link
-                                                            href={`/website/cars/${car.id}/edit`}
+                                                            href={`/website/cars/edit?id=${car.id}`}
                                                             className="p-2 text-gray-400 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-all"
                                                         >
                                                             <Pencil className="w-4 h-4" />
