@@ -25,6 +25,7 @@ interface WebsiteCar {
     is_active: boolean
     origin: string
     created_at: string
+    sort_order: number
 }
 
 type Tab = 'cars' | 'content' | 'media'
@@ -46,7 +47,7 @@ export default function WebsitePage() {
         try {
             const { data, error } = await supabase
                 .from('website_cars')
-                .select('id, slug, brand, brand_ar, model, model_ar, year, end_year, price_min, price_max, image, category, is_popular, is_active, origin, created_at')
+                .select('id, slug, brand, brand_ar, model, model_ar, year, end_year, price_min, price_max, image, category, is_popular, is_active, origin, created_at, sort_order')
                 .order('sort_order', { ascending: true })
                 .order('created_at', { ascending: false })
 
@@ -90,6 +91,22 @@ export default function WebsitePage() {
             setCars(prev => prev.filter(c => c.id !== id))
         } catch (err) {
             console.error('Error deleting car:', err)
+        }
+    }
+
+    async function updateSortOrder(id: string, newOrder: number) {
+        try {
+            await supabase
+                .from('website_cars')
+                .update({ sort_order: newOrder })
+                .eq('id', id)
+            // Re-sort the local state
+            setCars(prev => {
+                const updated = prev.map(c => c.id === id ? { ...c, sort_order: newOrder } : c)
+                return updated.sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0))
+            })
+        } catch (err) {
+            console.error('Error updating sort order:', err)
         }
     }
 
@@ -220,7 +237,7 @@ export default function WebsitePage() {
                                             <th className="text-start px-5 py-3.5 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">{t.website.model}</th>
                                             <th className="text-start px-5 py-3.5 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">{t.website.price}</th>
                                             <th className="text-start px-5 py-3.5 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">{t.website.origin}</th>
-                                            <th className="text-start px-5 py-3.5 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">{t.website.category}</th>
+                                            <th className="text-center px-5 py-3.5 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">الترتيب</th>
                                             <th className="text-center px-5 py-3.5 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">{t.website.popular}</th>
                                             <th className="text-center px-5 py-3.5 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">{t.common.status}</th>
                                             <th className="text-end px-5 py-3.5 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase"></th>
@@ -259,8 +276,14 @@ export default function WebsitePage() {
                                                         {car.origin === 'korean' ? t.website.korean : t.website.chinese}
                                                     </span>
                                                 </td>
-                                                <td className="px-5 py-4 text-sm text-gray-500 dark:text-gray-400 capitalize">
-                                                    {(t.website as Record<string, string>)[car.category] || car.category}
+                                                <td className="px-5 py-4 text-center">
+                                                    <input
+                                                        type="number"
+                                                        value={car.sort_order || 0}
+                                                        onChange={(e) => setCars(prev => prev.map(c => c.id === car.id ? { ...c, sort_order: parseInt(e.target.value) || 0 } : c))}
+                                                        onBlur={(e) => updateSortOrder(car.id, parseInt(e.target.value) || 0)}
+                                                        className="w-16 px-2 py-1 text-center bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                                                    />
                                                 </td>
                                                 <td className="px-5 py-4 text-center">
                                                     <button
