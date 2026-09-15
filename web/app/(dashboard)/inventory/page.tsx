@@ -6,7 +6,7 @@ import { useLanguage } from '@/context/LanguageContext'
 import { usePermissions } from '@/hooks/usePermissions'
 import { Database } from '@/lib/database.types'
 import { supabase } from '@/lib/supabase'
-import { Calendar, Link as LinkIcon, MapPin, MessageCircle, Plus, Search } from 'lucide-react'
+import { Calendar, Globe, Link as LinkIcon, MapPin, MessageCircle, Plus, Search } from 'lucide-react'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
@@ -99,13 +99,25 @@ export default function InventoryPage() {
         <div className="p-8">
             <div className="flex justify-between items-center mb-8">
                 <h1 className="text-3xl font-bold">{t.inventory.title}</h1>
-                <Link
-                    href="/inventory/new"
-                    className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-blue-700 transition"
-                >
-                    <Plus className="w-4 h-4" />
-                    {t.inventory.addCar}
-                </Link>
+                <div className="flex items-center gap-3">
+                    <a
+                        href="https://oussamaauto.com/inventory"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="bg-emerald-50 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-emerald-100 transition text-sm font-medium"
+                        title="عرض المخزون في الموقع المباشر"
+                    >
+                        <Globe className="w-4 h-4" />
+                        <span>الموقع (Stock Live)</span>
+                    </a>
+                    <Link
+                        href="/inventory/new"
+                        className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-blue-700 transition text-sm font-medium"
+                    >
+                        <Plus className="w-4 h-4" />
+                        {t.inventory.addCar}
+                    </Link>
+                </div>
             </div>
 
             <div className="mb-6 flex flex-col md:flex-row gap-4">
