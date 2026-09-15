@@ -7,7 +7,7 @@ import { useLanguage } from '@/context/LanguageContext'
 import { usePermissions } from '@/hooks/usePermissions'
 import { supabase } from '@/lib/supabase'
 import { clsx } from 'clsx'
-import { Calendar, Filter, Plus, Search, ShieldAlert, X } from 'lucide-react'
+import { Calendar, Filter, Layers, Plus, Search, ShieldAlert, Ship, X } from 'lucide-react'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
@@ -24,6 +24,8 @@ export default function FinanceList() {
     const [dateFilterMode, setDateFilterMode] = useState<'all' | 'month'>('all') // 'all' = Show All, 'month' = Filter by Month/Date
     const [currentDate, setCurrentDate] = useState(new Date()) // Used when dateFilterMode is 'month'
     const [statusFilter, setStatusFilter] = useState('All')
+    const [selectedBatch, setSelectedBatch] = useState<string>('All')
+    const [batches, setBatches] = useState<{ id: string, name: string }[]>([])
     const [search, setSearch] = useState('')
 
     // Data State
@@ -33,8 +35,22 @@ export default function FinanceList() {
     useEffect(() => {
         if (role === 'admin') {
             fetchTransactions()
+            fetchBatches()
         }
     }, [role, dateFilterMode, currentDate])
+
+    async function fetchBatches() {
+        try {
+            const { data } = await (supabase.from('shipment_batches') as any)
+                .select('id, name')
+                .eq('is_archived', false)
+                .order('created_at', { ascending: false })
+
+            if (data) setBatches(data)
+        } catch (e) {
+            console.error('Error fetching batches:', e)
+        }
+    }
 
     async function fetchTransactions() {
         setLoading(true)
@@ -109,12 +125,15 @@ export default function FinanceList() {
             t.description?.toLowerCase().includes(searchLower) ||
             t.category?.toLowerCase().includes(searchLower) ||
             t.type?.toLowerCase().includes(searchLower) ||
+            t.order_number?.toLowerCase().includes(searchLower) ||
+            t.batch_name?.toLowerCase().includes(searchLower) ||
             t.customer_name?.toLowerCase().includes(searchLower) ||
             t.customer_phone?.toLowerCase().includes(searchLower) ||
             t.customer_email?.toLowerCase().includes(searchLower) ||
             t.customer_address?.toLowerCase().includes(searchLower) ||
             t.car_brand?.toLowerCase().includes(searchLower) ||
             t.car_model?.toLowerCase().includes(searchLower) ||
+            t.car_trim?.toLowerCase().includes(searchLower) ||
             t.car_year?.toString().toLowerCase().includes(searchLower) ||
             t.car_vin?.toLowerCase().includes(searchLower) ||
             t.seller_name?.toLowerCase().includes(searchLower) ||
@@ -128,7 +147,15 @@ export default function FinanceList() {
         // 2. Status Filter
         const matchesStatus = statusFilter === 'All' || t.payment_status === statusFilter
 
-        // 3. Tab Filter
+        // 3. Batch Filter
+        let matchesBatch = true
+        if (selectedBatch === 'Unassigned') {
+            matchesBatch = !t.batch_name
+        } else if (selectedBatch !== 'All') {
+            matchesBatch = t.batch_name === selectedBatch
+        }
+
+        // 4. Tab Filter
         let matchesTab = false
         if (activeTab === 'transactions') {
             matchesTab = t.category !== 'Exchange'
@@ -144,24 +171,36 @@ export default function FinanceList() {
             matchesTab = t.category === 'Exchange'
         }
 
-        return matchesSearch && matchesStatus && matchesTab
+        return matchesSearch && matchesStatus && matchesBatch && matchesTab
     })
+
+    const unassignedCount = transactions.filter(t => !t.batch_name).length
 
     return (
         <div className="p-4 md:p-8">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-                <h1 className="text-3xl font-bold text-gray-900 dark:text-white">{t.finance.title}</h1>
-                <Link
-                    href="/finance/new"
-                    className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-blue-700 transition"
-                >
-                    <Plus className="w-4 h-4" />
-                    {t.finance.newTransaction}
-                </Link>
-            </div>
+                <div>
+                    <h1 className="text-3xl font-bold text-gray-900 dark:text-white">{t.finance.title}</h1>
+                    <p className="text-sm text-gray-500 mt-1">Vehicle import finance, Bon de Commande & legal contracts</p>
+                </div>
 
-            {/* Layout Wrapper usually handles the Date Picker, but we want custom control now */}
-            {/* We will manually render the tabs and date controls to separate them properly */}
+                <div className="flex flex-wrap items-center gap-3">
+                    <Link
+                        href="/finance/batches"
+                        className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-gray-50 dark:hover:bg-slate-800 transition font-medium text-sm shadow-sm"
+                    >
+                        <Ship className="w-4 h-4 text-blue-600" />
+                        {t.finance.batches}
+                    </Link>
+                    <Link
+                        href="/finance/new"
+                        className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-blue-700 transition font-medium text-sm shadow-sm"
+                    >
+                        <Plus className="w-4 h-4" />
+                        {t.finance.newTransaction}
+                    </Link>
+                </div>
+            </div>
 
             <div className="space-y-6">
                 <FinanceTabs activeTab={activeTab} onChange={setActiveTab} />
@@ -170,15 +209,84 @@ export default function FinanceList() {
                     <ExchangeSection currentDate={currentDate} />
                 ) : (
                     <>
+                        {/* Shipment Batch Filter Bar */}
+                        <div className="bg-white dark:bg-slate-900 p-3.5 rounded-xl border border-gray-200 dark:border-slate-800 shadow-sm flex flex-wrap items-center justify-between gap-3">
+                            <div className="flex flex-wrap items-center gap-2">
+                                <span className="text-xs font-semibold uppercase text-gray-500 dark:text-gray-400 flex items-center gap-1.5 mr-1">
+                                    <Ship className="w-3.5 h-3.5 text-blue-500" />
+                                    {t.finance.batch}:
+                                </span>
+
+                                <button
+                                    onClick={() => setSelectedBatch('All')}
+                                    className={clsx(
+                                        "px-3 py-1 text-xs font-semibold rounded-full transition-all",
+                                        selectedBatch === 'All'
+                                            ? "bg-blue-600 text-white shadow-sm"
+                                            : "bg-gray-100 dark:bg-slate-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200"
+                                    )}
+                                >
+                                    {t.finance.allBatches} ({transactions.length})
+                                </button>
+
+                                <button
+                                    onClick={() => setSelectedBatch('Unassigned')}
+                                    className={clsx(
+                                        "px-3 py-1 text-xs font-semibold rounded-full transition-all",
+                                        selectedBatch === 'Unassigned'
+                                            ? "bg-amber-600 text-white shadow-sm"
+                                            : "bg-amber-50 dark:bg-amber-950/30 text-amber-700 dark:text-amber-400 hover:bg-amber-100"
+                                    )}
+                                >
+                                    {t.finance.unassigned} ({unassignedCount})
+                                </button>
+
+                                {batches.map(batch => {
+                                    const count = transactions.filter(t => t.batch_name === batch.name).length
+                                    const isSelected = selectedBatch === batch.name
+                                    return (
+                                        <button
+                                            key={batch.id}
+                                            onClick={() => setSelectedBatch(batch.name)}
+                                            className={clsx(
+                                                "px-3 py-1 text-xs font-semibold rounded-full transition-all",
+                                                isSelected
+                                                    ? "bg-indigo-600 text-white shadow-sm"
+                                                    : "bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200"
+                                            )}
+                                        >
+                                            {batch.name} ({count})
+                                        </button>
+                                    )
+                                })}
+                            </div>
+
+                            <div className="flex items-center gap-2">
+                                {selectedBatch !== 'All' && selectedBatch !== 'Unassigned' && (
+                                    <Link
+                                        href={`/finance/batch-export?batch=${encodeURIComponent(selectedBatch)}`}
+                                        className="text-xs font-bold text-blue-600 hover:text-blue-800 bg-blue-50 dark:bg-blue-950/40 px-2.5 py-1 rounded-md border border-blue-200 dark:border-blue-800"
+                                    >
+                                        Export {selectedBatch}
+                                    </Link>
+                                )}
+                                <Link
+                                    href="/finance/batches"
+                                    className="text-xs text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 underline font-medium"
+                                >
+                                    Manage Batches &rarr;
+                                </Link>
+                            </div>
+                        </div>
+
                         {/* Controls Bar */}
                         <div className="flex flex-col lg:flex-row gap-4 justify-between bg-white dark:bg-slate-900 p-4 rounded-xl border border-gray-200 dark:border-slate-800 shadow-sm">
-
                             {/* Search */}
                             <div className="relative flex-1 min-w-[300px]">
                                 <Search className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
                                 <input
                                     type="text"
-                                    placeholder="Search anything (client, phone, address, VIN, price)..."
+                                    placeholder="Search anything (client, phone, address, VIN, price, order #)..."
                                     className="w-full pl-10 pr-10 py-2.5 border border-gray-200 dark:border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50 dark:bg-slate-950 dark:text-white"
                                     value={search}
                                     onChange={(e) => setSearch(e.target.value)}
@@ -222,55 +330,43 @@ export default function FinanceList() {
                                     </button>
                                 </div>
 
-                                {/* Month Picker (Conditional) */}
+                                {/* Month Picker Input (Conditional) */}
                                 {dateFilterMode === 'month' && (
-                                    <div className="flex items-center gap-2">
-                                        <button
-                                            onClick={() => setCurrentDate(new Date(currentDate.setMonth(currentDate.getMonth() - 1)))}
-                                            className="p-2 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-full"
-                                        >
-                                            ←
-                                        </button>
-                                        <span className="font-medium text-gray-900 dark:text-white min-w-[140px] text-center">
-                                            {currentDate.toLocaleString('default', { month: 'long', year: 'numeric' })}
-                                        </span>
-                                        <button
-                                            onClick={() => setCurrentDate(new Date(currentDate.setMonth(currentDate.getMonth() + 1)))}
-                                            className="p-2 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-full"
-                                        >
-                                            →
-                                        </button>
+                                    <div className="relative">
+                                        <input
+                                            type="month"
+                                            className="px-3 py-2 border border-gray-200 dark:border-slate-700 rounded-lg text-sm bg-white dark:bg-slate-950 dark:text-white font-medium"
+                                            value={`${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}`}
+                                            onChange={(e) => {
+                                                if (e.target.value) {
+                                                    const [year, month] = e.target.value.split('-').map(Number)
+                                                    setCurrentDate(new Date(year, month - 1, 1))
+                                                }
+                                            }}
+                                        />
                                     </div>
                                 )}
 
                                 {/* Status Filter */}
-                                <div className="relative">
+                                <div className="flex items-center gap-2">
+                                    <Filter className="w-4 h-4 text-gray-400" />
                                     <select
+                                        className="px-3 py-2 border border-gray-200 dark:border-slate-700 rounded-lg text-sm bg-white dark:bg-slate-950 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                                         value={statusFilter}
                                         onChange={(e) => setStatusFilter(e.target.value)}
-                                        className="appearance-none pl-3 pr-8 py-2.5 border border-gray-200 dark:border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-slate-900 dark:text-white text-sm"
                                     >
-                                        <option value="All">All Status</option>
-                                        <option value="Paid">Paid</option>
-                                        <option value="Pending">Pending</option>
-                                        <option value="Partial">Partial</option>
-                                        <option value="Unpaid">Unpaid</option>
+                                        <option value="All">{t.finance.allStatus}</option>
+                                        <option value="Paid">{t.finance.paid}</option>
+                                        <option value="Partial">{t.finance.partial}</option>
+                                        <option value="Pending">{t.finance.pending}</option>
                                     </select>
-                                    <Filter className="w-3.5 h-3.5 absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
                                 </div>
                             </div>
                         </div>
 
-                        {/* Results Info */}
-                        <div className="flex justify-between items-center text-sm text-gray-500 px-1">
-                            <span>Showing {filteredTransactions.length} transaction(s)</span>
-                        </div>
-
-                        {/* List View */}
+                        {/* List Component */}
                         {loading ? (
-                            <div className="flex justify-center items-center py-20">
-                                <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-                            </div>
+                            <div className="text-center py-12 text-gray-500">{t.finance.loading}</div>
                         ) : (
                             <TransactionList
                                 transactions={filteredTransactions}

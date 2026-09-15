@@ -4,7 +4,7 @@ import { useLanguage } from '@/context/LanguageContext'
 
 import { Database } from '@/lib/database.types'
 import { format } from 'date-fns'
-import { ArrowDownLeft, ArrowUpRight, Car, Edit, Eye, FileText, Globe, Printer, Trash2 } from 'lucide-react'
+import { ArrowDownLeft, ArrowUpRight, Car, Edit, Eye, FileText, Globe, Printer, ScrollText, Trash2 } from 'lucide-react'
 import Link from 'next/link'
 
 type Transaction = Database['public']['Tables']['financial_transactions']['Row'] & {
@@ -199,39 +199,49 @@ export default function TransactionCard({ transaction, onDelete, userRole }: Tra
             </div>
 
             {/* Actions Footer */}
-            <div className="grid grid-cols-4 gap-0 border-t border-gray-100 divide-x divide-gray-100">
+            <div className="grid grid-cols-5 gap-0 border-t border-gray-100 dark:border-slate-800 divide-x divide-gray-100 dark:divide-slate-800">
                 <Link
                     href={`/finance/details?id=${transaction.id}`}
-                    className="flex items-center justify-center gap-2 p-3 bg-gray-50 dark:bg-slate-800 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-slate-700 transition font-medium text-sm"
+                    className="flex items-center justify-center gap-1 p-2.5 bg-gray-50 dark:bg-slate-800 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-slate-700 transition font-medium text-xs"
                     title={t.finance.viewDetails}
                 >
                     <Eye className="w-4 h-4" />
                 </Link>
 
                 <Link
-                    href={`/finance/details?id=${transaction.id}`}
-                    className="flex items-center justify-center gap-2 p-3 bg-gray-50 dark:bg-slate-800 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-slate-700 transition font-medium text-sm"
-                    title="Print Invoice"
+                    href={`/finance/invoice?id=${transaction.id}`}
+                    className="flex items-center justify-center gap-1 p-2.5 bg-orange-50 dark:bg-orange-950/20 text-orange-600 dark:text-orange-400 hover:bg-orange-100 transition font-medium text-xs"
+                    title="Bon de Commande"
                 >
-                    <Printer className="w-4 h-4" />
+                    <FileText className="w-4 h-4" />
+                </Link>
+
+                <Link
+                    href={`/finance/contract?id=${transaction.id}`}
+                    className="flex items-center justify-center gap-1 p-2.5 bg-emerald-50 dark:bg-emerald-950/20 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-100 transition font-medium text-xs"
+                    title="Legal Contract (العقد)"
+                >
+                    <ScrollText className="w-4 h-4" />
                 </Link>
 
                 <Link
                     href={`/finance/edit?id=${transaction.id}`}
-                    className="flex items-center justify-center gap-2 p-3 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 hover:bg-blue-600 dark:hover:bg-blue-600 hover:text-white transition font-medium text-sm"
+                    className="flex items-center justify-center gap-1 p-2.5 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 hover:bg-blue-600 hover:text-white transition font-medium text-xs"
+                    title={t.common.edit}
                 >
                     <Edit className="w-4 h-4" />
-                    {t.common.edit}
                 </Link>
 
-                {userRole === 'admin' && (
+                {userRole === 'admin' ? (
                     <button
                         onClick={() => onDelete(transaction.id)}
-                        className="flex items-center justify-center gap-2 p-3 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-600 dark:hover:bg-red-600 hover:text-white transition font-medium text-sm"
+                        className="flex items-center justify-center gap-1 p-2.5 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-600 hover:text-white transition font-medium text-xs"
+                        title={t.common.delete}
                     >
                         <Trash2 className="w-4 h-4" />
-                        {t.common.delete}
                     </button>
+                ) : (
+                    <div className="bg-gray-50 dark:bg-slate-800"></div>
                 )}
             </div>
         </div >

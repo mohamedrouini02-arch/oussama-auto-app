@@ -452,9 +452,20 @@ export interface Database {
                     buyer_commission: number | null
                     bureau_commission: number | null
 
+                    // Order & Batch Details
+                    order_number: string | null
+                    delivery_method: string | null
+                    batch_name: string | null
+                    batch_archived: boolean | null
+
                     // Car Details
                     car_brand: string | null
                     car_model: string | null
+                    car_trim: string | null
+                    car_color: string | null
+                    car_energy: string | null
+                    car_transmission: string | null
+                    country_of_origin: string | null
                     car_year: number | null
                     car_vin: string | null
                     car_milage: number | null
@@ -474,6 +485,12 @@ export interface Database {
                     customer_email: string | null
                     customer_postal_code: string | null
                     customer_address: string | null
+                    customer_id_card: string | null
+                    passport_number: string | null
+                    passport_photo_url: string | null
+                    id_card_url: string | null
+                    id_card_back_url: string | null
+                    vehicle_photos_urls: string[] | null
                     shipping_price: number | null
 
                     created_at: string
@@ -501,8 +518,20 @@ export interface Database {
                     buyer_commission?: number | null
                     bureau_commission?: number | null
 
+                    // Order & Batch Details
+                    order_number?: string | null
+                    delivery_method?: string | null
+                    batch_name?: string | null
+                    batch_archived?: boolean | null
+
+                    // Car Details
                     car_brand?: string | null
                     car_model?: string | null
+                    car_trim?: string | null
+                    car_color?: string | null
+                    car_energy?: string | null
+                    car_transmission?: string | null
+                    country_of_origin?: string | null
                     car_year?: number | null
                     car_vin?: string | null
                     car_milage?: number | null
@@ -520,6 +549,13 @@ export interface Database {
                     customer_email?: string | null
                     customer_postal_code?: string | null
                     customer_address?: string | null
+                    customer_id_card?: string | null
+                    passport_number?: string | null
+                    passport_photo_url?: string | null
+                    id_card_url?: string | null
+                    id_card_back_url?: string | null
+                    vehicle_photos_urls?: string[] | null
+                    shipping_price?: number | null
 
                     created_at?: string
                     updated_at?: string | null
@@ -546,8 +582,20 @@ export interface Database {
                     buyer_commission?: number | null
                     bureau_commission?: number | null
 
+                    // Order & Batch Details
+                    order_number?: string | null
+                    delivery_method?: string | null
+                    batch_name?: string | null
+                    batch_archived?: boolean | null
+
+                    // Car Details
                     car_brand?: string | null
                     car_model?: string | null
+                    car_trim?: string | null
+                    car_color?: string | null
+                    car_energy?: string | null
+                    car_transmission?: string | null
+                    country_of_origin?: string | null
                     car_year?: number | null
                     car_vin?: string | null
                     car_milage?: number | null
@@ -565,6 +613,13 @@ export interface Database {
                     customer_email?: string | null
                     customer_postal_code?: string | null
                     customer_address?: string | null
+                    customer_id_card?: string | null
+                    passport_number?: string | null
+                    passport_photo_url?: string | null
+                    id_card_url?: string | null
+                    id_card_back_url?: string | null
+                    vehicle_photos_urls?: string[] | null
+                    shipping_price?: number | null
 
                     created_at?: string
                     updated_at?: string | null
@@ -737,6 +792,32 @@ export interface Database {
                     alt_text?: string | null
                     category?: string
                     created_at?: string
+                }
+            }
+            shipment_batches: {
+                Row: {
+                    id: string
+                    name: string
+                    description: string | null
+                    is_archived: boolean | null
+                    created_at: string
+                    updated_at: string | null
+                }
+                Insert: {
+                    id?: string
+                    name: string
+                    description?: string | null
+                    is_archived?: boolean | null
+                    created_at?: string
+                    updated_at?: string | null
+                }
+                Update: {
+                    id?: string
+                    name?: string
+                    description?: string | null
+                    is_archived?: boolean | null
+                    created_at?: string
+                    updated_at?: string | null
                 }
             }
         }

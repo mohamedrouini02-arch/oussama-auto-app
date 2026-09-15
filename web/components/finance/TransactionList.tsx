@@ -2,7 +2,7 @@
 
 import { clsx } from 'clsx'
 import { format } from 'date-fns'
-import { ArrowDown, ArrowUp, ArrowUpRight, Calendar, Car, Edit, Eye, FileText, MapPin, Phone, Trash, Truck, User, Wallet } from 'lucide-react'
+import { ArrowDown, ArrowUp, ArrowUpRight, Calendar, Car, Edit, Eye, FileText, MapPin, Phone, ScrollText, Trash, Truck, User, Wallet } from 'lucide-react'
 import Link from 'next/link'
 
 // Use a loose type for now
@@ -219,10 +219,17 @@ export default function TransactionList({ transactions, onDelete, userRole }: Tr
                                                 </Link>
                                                 <Link
                                                     href={`/finance/invoice?id=${t.id}`}
-                                                    className="p-1.5 text-gray-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
-                                                    title="View Invoice"
+                                                    className="p-1.5 text-gray-400 hover:text-orange-600 dark:hover:text-orange-400 transition-colors"
+                                                    title="Bon de Commande"
                                                 >
                                                     <FileText className="w-4 h-4" />
+                                                </Link>
+                                                <Link
+                                                    href={`/finance/contract?id=${t.id}`}
+                                                    className="p-1.5 text-gray-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
+                                                    title="Legal Contract (العقد)"
+                                                >
+                                                    <ScrollText className="w-4 h-4" />
                                                 </Link>
                                                 <Link
                                                     href={`/shipping/new?transaction_id=${t.id}`}
@@ -367,24 +374,32 @@ export default function TransactionList({ transactions, onDelete, userRole }: Tr
                                 )}
                             </div>
 
-                            <div className="flex justify-end gap-2 border-t border-gray-100 dark:border-slate-800 pt-3">
+                            <div className="flex flex-wrap justify-end gap-1.5 border-t border-gray-100 dark:border-slate-800 pt-3">
                                 <Link
                                     href={`/finance/details?id=${t.id}`}
-                                    className="flex-1 flex items-center justify-center gap-2 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-slate-800 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors"
+                                    className="px-2.5 py-1.5 text-xs font-medium text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-slate-800 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700 transition flex items-center gap-1"
                                 >
-                                    <Eye className="w-4 h-4" /> Details
+                                    <Eye className="w-3.5 h-3.5" /> Details
                                 </Link>
                                 <Link
                                     href={`/finance/invoice?id=${t.id}`}
-                                    className="flex-1 flex items-center justify-center gap-2 py-2 text-sm font-medium text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/10 rounded-lg hover:bg-blue-100 transition-colors"
+                                    className="px-2.5 py-1.5 text-xs font-medium text-orange-600 dark:text-orange-400 bg-orange-50 dark:bg-orange-950/20 rounded-lg hover:bg-orange-100 transition flex items-center gap-1"
+                                    title="Bon de Commande"
                                 >
-                                    <FileText className="w-4 h-4" /> Invoice
+                                    <FileText className="w-3.5 h-3.5" /> Bon
+                                </Link>
+                                <Link
+                                    href={`/finance/contract?id=${t.id}`}
+                                    className="px-2.5 py-1.5 text-xs font-medium text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/20 rounded-lg hover:bg-emerald-100 transition flex items-center gap-1"
+                                    title="Legal Contract"
+                                >
+                                    <ScrollText className="w-3.5 h-3.5" /> العقد
                                 </Link>
                                 <Link
                                     href={`/shipping/new?transaction_id=${t.id}`}
-                                    className="flex-1 flex items-center justify-center gap-2 py-2 text-sm font-medium text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/10 rounded-lg hover:bg-indigo-100 transition-colors"
+                                    className="px-2.5 py-1.5 text-xs font-medium text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/20 rounded-lg hover:bg-indigo-100 transition flex items-center gap-1"
                                 >
-                                    <Truck className="w-4 h-4" /> Ship
+                                    <Truck className="w-3.5 h-3.5" /> Ship
                                 </Link>
                                 {userRole === 'admin' && (
                                     <>

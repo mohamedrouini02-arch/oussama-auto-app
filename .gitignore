@@ -46,3 +46,7 @@ app-example
 /android
 web/public/sw.js
 web/public/sw.js.map
+
+# Local design & paperwork assets
+PAPERWORK/
+Posters/

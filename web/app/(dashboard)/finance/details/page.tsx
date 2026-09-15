@@ -143,25 +143,31 @@ function FinanceDetailsContent() {
                         </Link>
                         <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Transaction Details</h1>
                     </div>
-                    <div className="flex gap-3">
+                    <div className="flex flex-wrap gap-2.5">
                         <Link
-                            href={`/shipping/new?transaction_id=${id}`}
-                            className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition flex items-center gap-2"
+                            href={`/finance/invoice?id=${id}`}
+                            className="px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition flex items-center gap-2 font-medium shadow-sm text-sm"
                         >
-                            <Truck className="w-4 h-4" />
-                            Create Shipping Form
+                            <FileText className="w-4 h-4" />
+                            {t.finance.bonDeCommande}
                         </Link>
-                        <button
-                            onClick={() => window.print()}
-                            className="px-4 py-2 bg-gray-100 text-gray-700 dark:bg-slate-800 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-slate-700 transition flex items-center gap-2"
+                        <Link
+                            href={`/finance/contract?id=${id}`}
+                            className="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition flex items-center gap-2 font-medium shadow-sm text-sm"
                         >
                             <Printer className="w-4 h-4" />
-                            Print Invoice
-                        </button>
+                            {t.finance.contract}
+                        </Link>
+                        <Link
+                            href={`/shipping/new?transaction_id=${id}`}
+                            className="px-3.5 py-2 bg-indigo-50 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800 rounded-lg hover:bg-indigo-100 transition flex items-center gap-2 text-sm"
+                        >
+                            <Truck className="w-4 h-4" />
+                            Shipping Form
+                        </Link>
                         <Link
                             href={`/finance/edit?id=${id}`}
-                            className="px-4 py-2 bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/30 transition flex items-center gap-2"
-                            // To prevent prefetching issues in some contexts or if unnecessary:
+                            className="px-3.5 py-2 bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/30 transition flex items-center gap-2 text-sm"
                             prefetch={false}
                         >
                             <Edit className="w-4 h-4" />
@@ -169,7 +175,7 @@ function FinanceDetailsContent() {
                         </Link>
                         <button
                             onClick={handleDelete}
-                            className="px-4 py-2 bg-red-50 text-red-600 dark:bg-red-900/20 dark:text-red-400 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/30 transition flex items-center gap-2"
+                            className="px-3.5 py-2 bg-red-50 text-red-600 dark:bg-red-900/20 dark:text-red-400 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/30 transition flex items-center gap-2 text-sm"
                         >
                             <Trash2 className="w-4 h-4" />
                             {t.common.delete}
@@ -303,25 +309,78 @@ function FinanceDetailsContent() {
                                 <Car className="w-5 h-5 text-purple-500" />
                                 Car Details
                             </h3>
-                            <div className="space-y-3">
-                                <div className="flex justify-between">
-                                    <span className="text-gray-500 dark:text-gray-400">Model</span>
-                                    <span className="font-medium dark:text-white">{transaction.car_model || '-'}</span>
+                            <div className="space-y-2.5 text-sm">
+                                {transaction.order_number && (
+                                    <div className="flex justify-between border-b border-gray-100 dark:border-slate-800 pb-1.5">
+                                        <span className="text-gray-500 dark:text-gray-400">Order Number</span>
+                                        <span className="font-bold font-mono text-orange-600 dark:text-orange-400">#{transaction.order_number}</span>
+                                    </div>
+                                )}
+                                <div className="flex justify-between border-b border-gray-100 dark:border-slate-800 pb-1.5">
+                                    <span className="text-gray-500 dark:text-gray-400">Marque / Model</span>
+                                    <span className="font-bold dark:text-white uppercase">{transaction.car_brand || '-'} {transaction.car_model || ''}</span>
                                 </div>
-                                <div className="flex justify-between">
-                                    <span className="text-gray-500 dark:text-gray-400">Year</span>
+                                {transaction.car_trim && (
+                                    <div className="flex justify-between border-b border-gray-100 dark:border-slate-800 pb-1.5">
+                                        <span className="text-gray-500 dark:text-gray-400">Finition (Trim)</span>
+                                        <span className="font-semibold dark:text-white uppercase">{transaction.car_trim}</span>
+                                    </div>
+                                )}
+                                {transaction.car_color && (
+                                    <div className="flex justify-between border-b border-gray-100 dark:border-slate-800 pb-1.5">
+                                        <span className="text-gray-500 dark:text-gray-400">Couleur</span>
+                                        <span className="font-medium dark:text-white uppercase">{transaction.car_color}</span>
+                                    </div>
+                                )}
+                                {transaction.car_energy && (
+                                    <div className="flex justify-between border-b border-gray-100 dark:border-slate-800 pb-1.5">
+                                        <span className="text-gray-500 dark:text-gray-400">Energy (Carburant)</span>
+                                        <span className="font-medium dark:text-white">{transaction.car_energy}</span>
+                                    </div>
+                                )}
+                                {transaction.car_transmission && (
+                                    <div className="flex justify-between border-b border-gray-100 dark:border-slate-800 pb-1.5">
+                                        <span className="text-gray-500 dark:text-gray-400">Transmission</span>
+                                        <span className="font-medium dark:text-white">{transaction.car_transmission}</span>
+                                    </div>
+                                )}
+                                <div className="flex justify-between border-b border-gray-100 dark:border-slate-800 pb-1.5">
+                                    <span className="text-gray-500 dark:text-gray-400">Année</span>
                                     <span className="font-medium dark:text-white">{transaction.car_year || '-'}</span>
                                 </div>
-                                {transaction.car_vin && (
-                                    <div className="flex justify-between">
-                                        <span className="text-gray-500 dark:text-gray-400">VIN</span>
-                                        <span className="font-medium font-mono text-xs dark:text-gray-300">{transaction.car_vin}</span>
+                                {transaction.country_of_origin && (
+                                    <div className="flex justify-between border-b border-gray-100 dark:border-slate-800 pb-1.5">
+                                        <span className="text-gray-500 dark:text-gray-400">Pay Expo (Origin)</span>
+                                        <span className="font-medium dark:text-white">{transaction.country_of_origin}</span>
                                     </div>
                                 )}
                                 {transaction.car_milage && (
-                                    <div className="flex justify-between">
-                                        <span className="text-gray-500 dark:text-gray-400">Mileage</span>
-                                        <span className="font-medium dark:text-white">{transaction.car_milage.toLocaleString()} km</span>
+                                    <div className="flex justify-between border-b border-gray-100 dark:border-slate-800 pb-1.5">
+                                        <span className="text-gray-500 dark:text-gray-400">Kilométrage</span>
+                                        <span className="font-medium dark:text-white">{transaction.car_milage.toLocaleString()} KM</span>
+                                    </div>
+                                )}
+                                {transaction.car_vin && (
+                                    <div className="flex justify-between border-b border-gray-100 dark:border-slate-800 pb-1.5">
+                                        <span className="text-gray-500 dark:text-gray-400">N°: VIN</span>
+                                        <span className="font-mono font-bold text-blue-600 dark:text-blue-400 text-xs">{transaction.car_vin}</span>
+                                    </div>
+                                )}
+                                {transaction.delivery_method && (
+                                    <div className="flex justify-between border-b border-gray-100 dark:border-slate-800 pb-1.5">
+                                        <span className="text-gray-500 dark:text-gray-400">Moyen de Livraison</span>
+                                        <span className="font-semibold text-gray-800 dark:text-gray-200">{transaction.delivery_method}</span>
+                                    </div>
+                                )}
+                                {transaction.batch_name && (
+                                    <div className="flex justify-between items-center pt-1">
+                                        <span className="text-gray-500 dark:text-gray-400">Shipment Batch</span>
+                                        <Link 
+                                            href={`/finance/batch-export?batch=${encodeURIComponent(transaction.batch_name)}`}
+                                            className="font-bold text-xs text-blue-600 hover:underline bg-blue-50 dark:bg-blue-950/40 px-2 py-0.5 rounded border border-blue-200"
+                                        >
+                                            {transaction.batch_name} &rarr;
+                                        </Link>
                                     </div>
                                 )}
                             </div>

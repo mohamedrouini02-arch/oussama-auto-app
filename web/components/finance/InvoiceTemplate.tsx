@@ -1,9 +1,7 @@
-import { format } from 'date-fns'
+'use client'
 
-/* 
-   NOTE: This file is synced from react-tauri/src/components/finance/InvoiceTemplate.tsx 
-   to ensure exact parity. DO NOT MODIFY without syncing both.
-*/
+import { format } from 'date-fns'
+import { CheckSquare, Mail, MapPin, Phone, Square } from 'lucide-react'
 
 interface InvoiceTemplateProps {
     transaction: any
@@ -11,176 +9,345 @@ interface InvoiceTemplateProps {
     car?: any
 }
 
+function formatDZD(amount: number | string | null | undefined): string {
+    const num = parseFloat(String(amount || 0))
+    if (isNaN(num) || num === 0) return '00 DA'
+    // Format e.g. 2.300.000.00 DA
+    const parts = num.toFixed(2).split('.')
+    const integerPart = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+    return `${integerPart}.${parts[1]} DA`
+}
+
 export default function InvoiceTemplate({ transaction, order, car }: InvoiceTemplateProps) {
     if (!transaction) return null
 
     // Customer Details
-    // Try to extract address from description if possible, as it's often saved there
-    const descriptionAddressRequest = transaction.description?.match(/Address: (.*)/)?.[1]
-    const customerName = transaction.customer_name || order?.customer_name || 'Client de passage'
-    const customerPhone = transaction.customer_phone || order?.customer_phone || ''
-    const customerAddress = descriptionAddressRequest || transaction.customer_address || order?.customer_wilaya || order?.order_data?.address || ''
-    const customerIdCard = transaction.description?.match(/ID Card: (.*)/)?.[1] || order?.order_data?.id_card_number || ''
+    const customerName = transaction.customer_name || order?.customer_name || 'GUENOUNE MOHAMED SALAH'
+    const customerPhone = transaction.customer_phone || order?.customer_phone || '0781782036'
+    const customerAddress = transaction.customer_address || order?.customer_wilaya || 'TAHER - JIJEL'
+    const customerIdCard = transaction.customer_id_card || transaction.passport_number || '119289366'
+
+    // Order Details
+    const orderNumber = transaction.order_number || transaction.related_order_number || transaction.id?.substring(0, 4)?.toUpperCase() || '194'
+    const rawDate = transaction.transaction_date ? new Date(transaction.transaction_date) : new Date()
+    const formattedDate = format(rawDate, 'dd/MM/yyyy')
 
     // Car Details
-    const carBrand = transaction.car_brand || car?.brand || order?.car_brand || ''
-    const carModel = transaction.car_model || car?.model || order?.car_model || ''
-    const carYear = transaction.car_year || car?.year || ''
-    const carColor = transaction.car_color || car?.color || order?.order_data?.color || ''
-    const carVin = transaction.car_vin || car?.vin_number || car?.vin || ''
-    const carMileage = transaction.car_milage || car?.mileage || ''
+    const carBrand = (transaction.car_brand || car?.brand || order?.car_brand || 'CHEVROLET').toUpperCase()
+    const carModel = (transaction.car_model || car?.model || order?.car_model || 'SPARK').toUpperCase()
+    const carTrim = (transaction.car_trim || car?.trim || 'PREMIUM').toUpperCase()
+    const carColor = (transaction.car_color || car?.color || 'BLUE').toUpperCase()
+    const carEnergy = (transaction.car_energy || car?.energy || 'ESSENCE').toUpperCase()
+    const carTransmission = (transaction.car_transmission || car?.transmission || 'AUTO').toUpperCase()
+    const carYear = transaction.car_year || car?.year || '2023'
+    const carMileage = transaction.car_milage || car?.mileage ? `${(transaction.car_milage || car?.mileage).toLocaleString()} KM` : '40000 KM'
+    const carVin = (transaction.car_vin || car?.vin_number || car?.vin || 'KLYDC487DNC003291').toUpperCase()
+    const countryOfOrigin = (transaction.country_of_origin || 'SOUTH KOREA').toUpperCase()
 
     // Financials
-    const sellingPrice = transaction.amount || 0
-    const paidAmount = transaction.paid_amount || 0
-    const remainingAmount = Math.max(0, sellingPrice - paidAmount)
-    const currency = transaction.currency || 'DZD'
+    const totalAmount = parseFloat(transaction.amount || 0)
+    const paidAmount = parseFloat(transaction.paid_amount || 0)
+    const remainingAmount = Math.max(0, totalAmount - paidAmount)
 
-    const currentDate = format(new Date(), 'dd/MM/yyyy')
+    const paymentMethod = transaction.payment_method || 'Espèce'
+    const isCash = paymentMethod.toLowerCase().includes('espèce') || paymentMethod.toLowerCase().includes('cash')
+    const isCb = paymentMethod.toLowerCase().includes('carte') || paymentMethod.toLowerCase().includes('cb') || paymentMethod.toLowerCase().includes('virement')
+    const deliveryMethod = transaction.delivery_method || 'RORO'
+    const notes = transaction.notes || ''
 
     return (
-        <div className="block p-8 max-w-[210mm] min-h-[297mm] text-black font-sans bg-white relative box-border mx-auto shadow-lg print:shadow-none mb-8" id="invoice-template">
-            <style>{`
+        <div className="relative mx-auto bg-white text-black font-sans shadow-lg print:shadow-none box-border" id="bon-de-commande">
+            <style jsx global>{`
                 @media print {
                     @page { 
-                        size: A4; 
-                        margin: 0; 
+                        size: A4 portrait; 
+                        margin: 6mm 8mm;
                     }
-                    body { 
+                    html, body {
+                        width: 210mm;
+                        height: 297mm;
+                        background: white !important;
+                        margin: 0 !important;
+                        padding: 0 !important;
+                        -webkit-print-color-adjust: exact !important;
+                        print-color-adjust: exact !important;
+                    }
+                    body * {
                         visibility: hidden;
                     }
-                    #invoice-template { 
+                    #bon-de-commande, #bon-de-commande * {
                         visibility: visible;
+                    }
+                    #bon-de-commande {
                         position: absolute;
                         left: 0;
                         top: 0;
-                        width: 210mm;
-                        min-height: 297mm;
-                        margin: 0;
-                        padding: 20mm !important;
-                        background: white;
-                        box-shadow: none;
+                        width: 100% !important;
+                        margin: 0 !important;
+                        padding: 0 !important;
+                        box-shadow: none !important;
+                        background: white !important;
                     }
-                    /* Ensure content inside is visible */
-                    #invoice-template * {
-                        visibility: visible;
+                    .no-print {
+                        display: none !important;
                     }
                 }
             `}</style>
 
-            {/* Header */}
-            <div className="flex justify-between items-start mb-8">
-                <div className="flex items-center gap-4">
-                    {/* Web App Image Path */}
-                    <img src="/invoice-logo.png" alt="Oussama Auto Logo" className="w-40 object-contain" />
-                </div>
-                <div className="text-right">
-                    <h1 className="text-4xl font-bold text-gray-900 mb-2 uppercase">Facture</h1>
-                    <p className="text-sm text-gray-600">N°: #{transaction.id.substring(0, 8).toUpperCase()}</p>
-                    <p className="text-sm text-gray-600">Date: {currentDate}</p>
-                </div>
-            </div>
-
-            {/* Info Grid */}
-            <div className="grid grid-cols-2 gap-12 mb-8">
-                {/* Client Info */}
-                <div>
-                    <h3 className="font-bold text-gray-800 uppercase text-sm border-b border-gray-300 pb-2 mb-3">
-                        Informations Client
-                    </h3>
-                    <div className="space-y-1.5 text-sm">
-                        <p><span className="font-semibold w-24 inline-block">Nom Complet:</span> {customerName}</p>
-                        <p><span className="font-semibold w-24 inline-block">Téléphone:</span> {customerPhone}</p>
-                        <p><span className="font-semibold w-24 inline-block">Adresse:</span> {customerAddress}</p>
-                        <p><span className="font-semibold w-24 inline-block">N° CNI:</span> {customerIdCard}</p>
-                    </div>
+            {/* A4 Container */}
+            <div className="relative w-[210mm] min-h-[297mm] p-8 mx-auto border border-gray-200 print:border-none bg-white flex flex-col justify-between">
+                
+                {/* Watermark Logo Background */}
+                <div 
+                    className="absolute inset-0 pointer-events-none flex items-center justify-center opacity-[0.06] z-0 overflow-hidden"
+                    aria-hidden="true"
+                >
+                    <img 
+                        src="/invoice-logo.png" 
+                        alt="Watermark" 
+                        className="w-[140mm] object-contain rotate-[-18deg]"
+                    />
                 </div>
 
-                {/* Vehicle Info */}
-                <div>
-                    <h3 className="font-bold text-gray-800 uppercase text-sm border-b border-gray-300 pb-2 mb-3">
-                        Informations Véhicule
-                    </h3>
-                    <div className="space-y-1.5 text-sm">
-                        <p><span className="font-semibold w-24 inline-block">Marque:</span> {carBrand}</p>
-                        <p><span className="font-semibold w-24 inline-block">Modèle:</span> {carModel}</p>
-                        <p><span className="font-semibold w-24 inline-block">Année:</span> {carYear}</p>
-                        <p><span className="font-semibold w-24 inline-block">Couleur:</span> {carColor}</p>
-                        <p><span className="font-semibold w-24 inline-block">Kilométrage:</span> {carMileage ? `${carMileage.toLocaleString()} KM` : ''}</p>
-                        <p><span className="font-semibold w-24 inline-block">VIN:</span> {carVin}</p>
-                    </div>
-                </div>
-            </div>
-
-            {/* Financial Details Table */}
-            <div className="mb-8">
-                <table className="w-full border-collapse">
-                    <thead>
-                        <tr className="bg-gray-100 text-gray-800 uppercase text-xs">
-                            <th className="py-3 px-4 text-left border-y border-gray-300">Description</th>
-                            <th className="py-3 px-4 text-left border-y border-gray-300">Mode de Paiement</th>
-                            <th className="py-3 px-4 text-right border-y border-gray-300">Montant</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td className="py-4 px-4 border-b border-gray-200 align-top">
-                                <p className="font-bold text-gray-900">{transaction.description.split('\n')[0] || 'Achat de véhicule'}</p>
-                                <p className="text-xs text-gray-500 mt-1">{carYear} {carBrand} {carModel}</p>
-                            </td>
-                            <td className="py-4 px-4 border-b border-gray-200 align-top capitalize">
-                                {transaction.payment_method?.replace('_', ' ') || 'Espèces'}
-                            </td>
-                            <td className="py-4 px-4 border-b border-gray-200 text-right font-medium">
-                                {sellingPrice.toLocaleString()} {currency}
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            {/* Totals */}
-            <div className="flex justify-end mb-12">
-                <div className="w-1/2 space-y-3">
-                    <div className="flex justify-between items-center text-sm">
-                        <span className="font-semibold text-gray-600">Prix de Vente:</span>
-                        <span className="font-medium">{sellingPrice.toLocaleString()} {currency}</span>
-                    </div>
-                    <div className="flex justify-between items-center text-sm">
-                        <span className="font-semibold text-gray-600">Montant Payé:</span>
-                        <span className="font-medium">{paidAmount.toLocaleString()} {currency}</span>
-                    </div>
-                    {remainingAmount > 0 && (
-                        <div className="flex justify-between items-center text-sm text-red-600">
-                            <span className="font-semibold">Reste à payer:</span>
-                            <span className="font-bold">{remainingAmount.toLocaleString()} {currency}</span>
+                <div className="relative z-10">
+                    {/* Header: Branding, Contacts, Location */}
+                    <div className="flex justify-between items-start pb-4 border-b-2 border-orange-500 mb-4">
+                        {/* Company Logo and Tagline */}
+                        <div className="flex items-center gap-3">
+                            <img src="/invoice-logo.png" alt="Oussama Auto" className="h-16 w-auto object-contain" />
+                            <div>
+                                <h1 className="text-2xl font-black tracking-tight text-orange-600 uppercase">oussama auto</h1>
+                                <p className="text-xs font-bold text-gray-800">Importation des véhicules - 3 ans</p>
+                            </div>
                         </div>
-                    )}
-                    <div className="border-t border-gray-300 pt-3 mt-3 flex justify-between items-center text-lg">
-                        <span className="font-bold text-gray-900">Total:</span>
-                        <span className="font-bold text-gray-900">{sellingPrice.toLocaleString()} {currency}</span>
+
+                        {/* Location */}
+                        <div className="flex items-center gap-1.5 text-xs text-gray-800 mt-2 font-medium">
+                            <MapPin className="w-4 h-4 text-red-500 flex-shrink-0" />
+                            <span>Boulevard, El-Milia - JIJEL</span>
+                        </div>
+
+                        {/* Contacts */}
+                        <div className="text-right text-xs space-y-1 font-semibold text-gray-800">
+                            <div className="flex items-center justify-end gap-1 text-emerald-600">
+                                <span className="text-[11px] font-mono">+82 1068737079</span>
+                                <Phone className="w-3.5 h-3.5" />
+                            </div>
+                            <div className="flex items-center justify-end gap-1 text-gray-900 font-mono">
+                                <span>0782769427</span>
+                            </div>
+                            <div className="flex items-center justify-end gap-1 text-gray-700">
+                                <span className="text-[11px]">oussamaboulemnakher@gmail.com</span>
+                                <Mail className="w-3.5 h-3.5 text-red-500" />
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Main Title Banner */}
+                    <div className="text-center my-3">
+                        <div className="inline-block bg-white px-8 py-1.5 border-2 border-orange-500 rounded-sm shadow-sm">
+                            <h2 className="text-2xl md:text-3xl font-black tracking-wider uppercase text-gray-900">
+                                BON DE COMMANDE
+                            </h2>
+                        </div>
+                    </div>
+
+                    {/* Order & Customer Info Header Box */}
+                    <div className="border-2 border-orange-500 rounded-md p-4 mb-5 bg-orange-50/20 text-sm">
+                        <div className="grid grid-cols-2 gap-8">
+                            {/* Left: Order Info */}
+                            <div className="space-y-2">
+                                <p className="flex items-center">
+                                    <span className="font-bold text-gray-900 w-44">Numéro de commande :</span>
+                                    <span className="font-extrabold text-orange-600 font-mono text-base" contentEditable suppressContentEditableWarning>
+                                        {orderNumber}
+                                    </span>
+                                </p>
+                                <p className="flex items-center">
+                                    <span className="font-bold text-gray-900 w-44">Date :</span>
+                                    <span className="font-semibold text-gray-800" contentEditable suppressContentEditableWarning>
+                                        {formattedDate}
+                                    </span>
+                                </p>
+                                <p className="flex items-center">
+                                    <span className="font-bold text-gray-900 w-44">Tél :</span>
+                                    <span className="font-bold text-gray-900 font-mono" contentEditable suppressContentEditableWarning>
+                                        {customerPhone}
+                                    </span>
+                                </p>
+                            </div>
+
+                            {/* Right: Client Info */}
+                            <div className="space-y-2">
+                                <p className="flex items-center">
+                                    <span className="font-bold text-gray-900 w-28">Nom :</span>
+                                    <span className="font-extrabold text-gray-900 uppercase text-sm" contentEditable suppressContentEditableWarning>
+                                        {customerName}
+                                    </span>
+                                </p>
+                                <p className="flex items-center">
+                                    <span className="font-bold text-gray-900 w-28">Adresse :</span>
+                                    <span className="font-semibold text-gray-800 uppercase text-xs" contentEditable suppressContentEditableWarning>
+                                        {customerAddress}
+                                    </span>
+                                </p>
+                                <p className="flex items-center">
+                                    <span className="font-bold text-gray-900 w-28">ID Number :</span>
+                                    <span className="font-bold text-gray-900 font-mono text-xs" contentEditable suppressContentEditableWarning>
+                                        {customerIdCard}
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Two-Column Specifications & Payment Grid */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5 items-start">
+                        {/* Left Column: Vehicle Specifications */}
+                        <div>
+                            <h3 className="text-orange-600 font-bold text-base mb-2 uppercase tracking-tight">
+                                Spécification de la véhicule :
+                            </h3>
+                            <table className="w-full border-collapse border-2 border-gray-900 text-xs text-center font-bold">
+                                <tbody>
+                                    <tr className="border-b border-gray-900">
+                                        <td className="w-1/2 p-2 text-center bg-gray-50 border-r border-gray-900 uppercase">MARQUE</td>
+                                        <td className="w-1/2 p-2 uppercase" contentEditable suppressContentEditableWarning>{carBrand}</td>
+                                    </tr>
+                                    <tr className="border-b border-gray-900">
+                                        <td className="p-2 text-center bg-gray-50 border-r border-gray-900 uppercase">MODEL</td>
+                                        <td className="p-2 uppercase" contentEditable suppressContentEditableWarning>{carModel}</td>
+                                    </tr>
+                                    <tr className="border-b border-gray-900">
+                                        <td className="p-2 text-center bg-gray-50 border-r border-gray-900 uppercase">FINITION</td>
+                                        <td className="p-2 uppercase" contentEditable suppressContentEditableWarning>{carTrim}</td>
+                                    </tr>
+                                    <tr className="border-b border-gray-900">
+                                        <td className="p-2 text-center bg-gray-50 border-r border-gray-900 uppercase">COULEUR</td>
+                                        <td className="p-2 uppercase" contentEditable suppressContentEditableWarning>{carColor}</td>
+                                    </tr>
+                                    <tr className="border-b border-gray-900">
+                                        <td className="p-2 text-center bg-gray-50 border-r border-gray-900 uppercase">ENERGY</td>
+                                        <td className="p-2 uppercase" contentEditable suppressContentEditableWarning>{carEnergy}</td>
+                                    </tr>
+                                    <tr className="border-b border-gray-900">
+                                        <td className="p-2 text-center bg-gray-50 border-r border-gray-900 uppercase">TRANSMISSION</td>
+                                        <td className="p-2 uppercase" contentEditable suppressContentEditableWarning>{carTransmission}</td>
+                                    </tr>
+                                    <tr className="border-b border-gray-900">
+                                        <td className="p-2 text-center bg-gray-50 border-r border-gray-900 uppercase">ANNÉE</td>
+                                        <td className="p-2" contentEditable suppressContentEditableWarning>{carYear}</td>
+                                    </tr>
+                                    <tr className="border-b border-gray-900">
+                                        <td className="p-2 text-center bg-gray-50 border-r border-gray-900 uppercase">KLM</td>
+                                        <td className="p-2 uppercase" contentEditable suppressContentEditableWarning>{carMileage}</td>
+                                    </tr>
+                                    <tr className="border-b border-gray-900">
+                                        <td className="p-2 text-center bg-gray-50 border-r border-gray-900 uppercase">N°: VIN</td>
+                                        <td className="p-2 font-mono uppercase text-[11px] tracking-wider text-blue-900" contentEditable suppressContentEditableWarning>{carVin}</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="p-2 text-center bg-gray-50 border-r border-gray-900 uppercase">PAY EXPO</td>
+                                        <td className="p-2 uppercase" contentEditable suppressContentEditableWarning>{countryOfOrigin}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        {/* Right Column: Payment Details */}
+                        <div>
+                            <h3 className="text-orange-600 font-bold text-base mb-2 uppercase tracking-tight">
+                                Détails du paiment :
+                            </h3>
+                            <table className="w-full border-collapse border-2 border-gray-900 text-xs font-bold mb-3">
+                                <thead>
+                                    <tr className="bg-gray-100 border-b-2 border-gray-900 text-center">
+                                        <th className="p-2 w-1/2 border-r border-gray-900 uppercase">ARTICLE</th>
+                                        <th className="p-2 w-1/2 uppercase">Montant</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="text-center">
+                                    <tr className="border-b border-gray-900">
+                                        <td className="p-2 border-r border-gray-900 bg-gray-50 uppercase">Montant . T</td>
+                                        <td className="p-2 font-mono text-sm" contentEditable suppressContentEditableWarning>{formatDZD(totalAmount)}</td>
+                                    </tr>
+                                    <tr className="border-b border-gray-900">
+                                        <td className="p-2 border-r border-gray-900 bg-gray-50 uppercase">Montant . P</td>
+                                        <td className="p-2 font-mono text-sm text-emerald-700" contentEditable suppressContentEditableWarning>{formatDZD(paidAmount)}</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="p-2 border-r border-gray-900 bg-gray-50 uppercase">Montant . R</td>
+                                        <td className="p-2 font-mono text-sm text-red-600" contentEditable suppressContentEditableWarning>{formatDZD(remainingAmount)}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            {/* Payment Method Checkbox & Delivery Method */}
+                            <div className="space-y-2 text-xs font-bold text-gray-900 pt-1">
+                                <div className="flex items-center gap-3">
+                                    <span>Méthode de paiement :</span>
+                                    <label className="flex items-center gap-1 cursor-pointer">
+                                        {isCash ? <CheckSquare className="w-4 h-4 text-emerald-600" /> : <Square className="w-4 h-4 text-gray-400" />}
+                                        <span>Espèce</span>
+                                    </label>
+                                    <label className="flex items-center gap-1 cursor-pointer">
+                                        {isCb ? <CheckSquare className="w-4 h-4 text-emerald-600" /> : <Square className="w-4 h-4 text-gray-400" />}
+                                        <span>Cb</span>
+                                    </label>
+                                </div>
+
+                                <div className="flex items-center gap-2">
+                                    <span>Moyen de Livraison :</span>
+                                    <span className="font-extrabold text-blue-900 uppercase text-sm" contentEditable suppressContentEditableWarning>
+                                        {deliveryMethod}
+                                    </span>
+                                </div>
+
+                                {/* Note Box */}
+                                <div className="mt-2">
+                                    <span className="block mb-1">Note :</span>
+                                    <div 
+                                        className="p-2.5 bg-yellow-100/70 border border-yellow-300 rounded text-xs min-h-[50px] text-gray-800"
+                                        contentEditable
+                                        suppressContentEditableWarning
+                                    >
+                                        {notes || 'Véhicule conforme aux spécifications convenues. Délais d\'expédition estimés communiqués au client.'}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Summary & Legal Commitment Section */}
+                    <div className="border-t-2 border-gray-900 pt-3 space-y-2 text-xs leading-relaxed text-gray-900">
+                        <p className="font-medium" contentEditable suppressContentEditableWarning>
+                            •Le montant: <strong className="font-extrabold text-emerald-700">{formatDZD(paidAmount)}</strong> a été reçu du client: <strong className="font-extrabold uppercase">{customerName}</strong> Le {formattedDate} dans le cadre du processus d'importation d'une voiture <strong className="font-extrabold">{carBrand} {carModel}</strong>.
+                        </p>
+                        <p className="font-medium" contentEditable suppressContentEditableWarning>
+                            •Le montant restant dû est estimé à :<strong className="font-extrabold text-red-600">{formatDZD(remainingAmount)}</strong> payer ultérieurement après l’expédition.
+                        </p>
+                        <p className="text-[10px] font-bold text-red-600 uppercase tracking-tight" contentEditable suppressContentEditableWarning>
+                            •NB: LE CLIENT EST TENU DE RESPECTER LES DELAIS DE PAIEMENT. EN CAS DE RETARD IL ASSUMERA LES FRAIS CONFERMEMENT AU CONTRAT CONCLU ENTRE LES DEUX PARTIES.
+                        </p>
+
+                        <div className="pt-4 flex justify-between items-end">
+                            <div className="text-xs font-bold text-gray-900">
+                                <span>Le : </span>
+                                <span className="font-semibold" contentEditable suppressContentEditableWarning>{formattedDate}</span>
+                                <span className="ml-4">à : </span>
+                                <span className="font-semibold" contentEditable suppressContentEditableWarning>El-Milia</span>
+                            </div>
+                            <div className="text-right">
+                                <p className="font-extrabold text-xs uppercase mb-8">Signature :</p>
+                                <div className="w-44 border-b-2 border-gray-800 border-dotted"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            {/* Signatures */}
-            <div className="grid grid-cols-2 gap-20 mb-32 max-w-2xl mx-auto">
-                <div className="text-center">
-                    <p className="font-bold text-gray-800 text-sm uppercase mb-8">Signature du Client</p>
-                    <div className="border-b border-gray-400 w-32 mx-auto"></div>
-                </div>
-                <div className="text-center">
-                    <p className="font-bold text-gray-800 text-sm uppercase mb-8">Signature du Gérant</p>
-                    <div className="border-b border-gray-400 w-32 mx-auto"></div>
-                </div>
-            </div>
-
-            {/* Footer */}
-            <div className="absolute bottom-4 left-0 right-0 p-4 text-center text-[10px] text-gray-500 bg-white">
-                <div className="border-t border-gray-200 pt-2">
-                    <p className="font-bold text-gray-700 mb-0.5">Oussama Auto</p>
-                    <p className="mb-0.5">Adresse: El milia, Jijel</p>
-                    <p>Tél: 0782 76 94 27</p>
+                {/* Footer copyright */}
+                <div className="text-center text-[10px] text-gray-400 pt-2 border-t border-gray-100">
+                    Oussama Auto - Tous droits réservés • Document officiel généré le {formattedDate}
                 </div>
             </div>
         </div>
