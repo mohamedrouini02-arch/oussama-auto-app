@@ -61,41 +61,77 @@ export default function InvoiceTemplate({ transaction, order, car }: InvoiceTemp
                 @media print {
                     @page { 
                         size: A4 portrait; 
-                        margin: 6mm 8mm;
+                        margin: 0;
                     }
                     html, body {
-                        width: 210mm;
-                        height: 297mm;
+                        width: 210mm !important;
+                        height: 297mm !important;
                         background: white !important;
+                        color: black !important;
                         margin: 0 !important;
                         padding: 0 !important;
+                        overflow: hidden !important;
                         -webkit-print-color-adjust: exact !important;
                         print-color-adjust: exact !important;
                     }
-                    body * {
-                        visibility: hidden;
+                    /* Force exact reproduction of all colors, borders, and fills */
+                    * {
+                        -webkit-print-color-adjust: exact !important;
+                        print-color-adjust: exact !important;
+                        color-adjust: exact !important;
                     }
-                    #bon-de-commande, #bon-de-commande * {
-                        visibility: visible;
+                    /* Hide unnecessary dashboard and UI elements */
+                    aside, nav, header, .print\\:hidden, .no-print, button {
+                        display: none !important;
+                    }
+                    /* Reset dashboard parent containers */
+                    #__next, [data-nextjs-scroll-focus-boundary], main, .min-h-screen {
+                        margin: 0 !important;
+                        padding: 0 !important;
+                        width: 210mm !important;
+                        max-width: 210mm !important;
+                        min-height: auto !important;
+                        height: auto !important;
+                        overflow: visible !important;
+                        position: static !important;
+                        transform: none !important;
+                        background: white !important;
                     }
                     #bon-de-commande {
-                        position: absolute;
-                        left: 0;
-                        top: 0;
-                        width: 100% !important;
+                        position: relative !important;
+                        left: auto !important;
+                        top: auto !important;
+                        width: 210mm !important;
+                        height: 297mm !important;
+                        max-height: 297mm !important;
+                        min-height: 297mm !important;
                         margin: 0 !important;
                         padding: 0 !important;
                         box-shadow: none !important;
+                        border: none !important;
                         background: white !important;
+                        overflow: hidden !important;
+                        page-break-inside: avoid !important;
+                        break-inside: avoid !important;
+                        page-break-after: avoid !important;
+                        break-after: avoid !important;
                     }
-                    .no-print {
-                        display: none !important;
+                    .bon-de-commande-sheet {
+                        width: 210mm !important;
+                        height: 297mm !important;
+                        max-height: 297mm !important;
+                        min-height: 297mm !important;
+                        padding: 10mm 12mm 8mm 12mm !important;
+                        margin: 0 !important;
+                        border: none !important;
+                        box-sizing: border-box !important;
+                        overflow: hidden !important;
                     }
                 }
             `}</style>
 
             {/* A4 Container */}
-            <div className="relative w-[210mm] min-h-[297mm] p-8 mx-auto border border-gray-200 print:border-none bg-white flex flex-col justify-between">
+            <div className="bon-de-commande-sheet relative w-[210mm] min-h-[297mm] p-[10mm_12mm_8mm_12mm] mx-auto border border-gray-200 print:border-none bg-white flex flex-col justify-between box-border">
                 
                 {/* Watermark Logo Background */}
                 <div 
@@ -111,7 +147,7 @@ export default function InvoiceTemplate({ transaction, order, car }: InvoiceTemp
 
                 <div className="relative z-10">
                     {/* Header: Branding, Contacts, Location */}
-                    <div className="flex justify-between items-start pb-4 border-b-2 border-orange-500 mb-4">
+                    <div className="flex justify-between items-start pb-3 border-b-2 border-orange-500 mb-3">
                         {/* Company Logo and Tagline */}
                         <div className="flex items-center gap-3">
                             <img src="/invoice-logo.png" alt="Oussama Auto" className="h-16 w-auto object-contain" />
@@ -144,19 +180,19 @@ export default function InvoiceTemplate({ transaction, order, car }: InvoiceTemp
                     </div>
 
                     {/* Main Title Banner */}
-                    <div className="text-center my-3">
-                        <div className="inline-block bg-white px-8 py-1.5 border-2 border-orange-500 rounded-sm shadow-sm">
-                            <h2 className="text-2xl md:text-3xl font-black tracking-wider uppercase text-gray-900">
+                    <div className="text-center my-2">
+                        <div className="inline-block bg-white px-8 py-1 border-2 border-orange-500 rounded-sm shadow-sm">
+                            <h2 className="text-xl md:text-2xl font-black tracking-wider uppercase text-gray-900">
                                 BON DE COMMANDE
                             </h2>
                         </div>
                     </div>
 
                     {/* Order & Customer Info Header Box */}
-                    <div className="border-2 border-orange-500 rounded-md p-4 mb-5 bg-orange-50/20 text-sm">
-                        <div className="grid grid-cols-2 gap-8">
+                    <div className="border-2 border-orange-500 rounded-md p-3 mb-3 bg-orange-50/20 text-xs md:text-sm">
+                        <div className="grid grid-cols-2 gap-6">
                             {/* Left: Order Info */}
-                            <div className="space-y-2">
+                            <div className="space-y-1.5">
                                 <p className="flex items-center">
                                     <span className="font-bold text-gray-900 w-44">Numéro de commande :</span>
                                     <span className="font-extrabold text-orange-600 font-mono text-base" contentEditable suppressContentEditableWarning>
@@ -178,7 +214,7 @@ export default function InvoiceTemplate({ transaction, order, car }: InvoiceTemp
                             </div>
 
                             {/* Right: Client Info */}
-                            <div className="space-y-2">
+                            <div className="space-y-1.5">
                                 <p className="flex items-center">
                                     <span className="font-bold text-gray-900 w-28">Nom :</span>
                                     <span className="font-extrabold text-gray-900 uppercase text-sm" contentEditable suppressContentEditableWarning>
@@ -202,7 +238,7 @@ export default function InvoiceTemplate({ transaction, order, car }: InvoiceTemp
                     </div>
 
                     {/* Two-Column Specifications & Payment Grid */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5 items-start">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3 items-start">
                         {/* Left Column: Vehicle Specifications */}
                         <div>
                             <h3 className="text-orange-600 font-bold text-base mb-2 uppercase tracking-tight">
@@ -319,7 +355,7 @@ export default function InvoiceTemplate({ transaction, order, car }: InvoiceTemp
                     </div>
 
                     {/* Summary & Legal Commitment Section */}
-                    <div className="border-t-2 border-gray-900 pt-3 space-y-2 text-xs leading-relaxed text-gray-900">
+                    <div className="border-t-2 border-gray-900 pt-2 space-y-1.5 text-xs leading-relaxed text-gray-900">
                         <p className="font-medium" contentEditable suppressContentEditableWarning>
                             •Le montant: <strong className="font-extrabold text-emerald-700">{formatDZD(paidAmount)}</strong> a été reçu du client: <strong className="font-extrabold uppercase">{customerName}</strong> Le {formattedDate} dans le cadre du processus d'importation d'une voiture <strong className="font-extrabold">{carBrand} {carModel}</strong>.
                         </p>
@@ -330,7 +366,7 @@ export default function InvoiceTemplate({ transaction, order, car }: InvoiceTemp
                             •NB: LE CLIENT EST TENU DE RESPECTER LES DELAIS DE PAIEMENT. EN CAS DE RETARD IL ASSUMERA LES FRAIS CONFERMEMENT AU CONTRAT CONCLU ENTRE LES DEUX PARTIES.
                         </p>
 
-                        <div className="pt-4 flex justify-between items-end">
+                        <div className="pt-2 flex justify-between items-end">
                             <div className="text-xs font-bold text-gray-900">
                                 <span>Le : </span>
                                 <span className="font-semibold" contentEditable suppressContentEditableWarning>{formattedDate}</span>
@@ -338,7 +374,7 @@ export default function InvoiceTemplate({ transaction, order, car }: InvoiceTemp
                                 <span className="font-semibold" contentEditable suppressContentEditableWarning>El-Milia</span>
                             </div>
                             <div className="text-right">
-                                <p className="font-extrabold text-xs uppercase mb-8">Signature :</p>
+                                <p className="font-extrabold text-xs uppercase mb-6">Signature :</p>
                                 <div className="w-44 border-b-2 border-gray-800 border-dotted"></div>
                             </div>
                         </div>

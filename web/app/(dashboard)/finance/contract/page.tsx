@@ -88,7 +88,7 @@ function ContractContent() {
     }
 
     return (
-        <div className="min-h-screen bg-gray-100 dark:bg-slate-950 p-4 md:p-8">
+        <div className="min-h-screen bg-gray-100 dark:bg-slate-950 p-4 md:p-8 print:p-0 print:m-0 print:bg-white print:min-h-0">
             {/* Top Toolbar (Hidden on Print) */}
             <div className="max-w-[210mm] mx-auto mb-6 print:hidden flex flex-wrap justify-between items-center gap-4 bg-white dark:bg-slate-900 p-4 rounded-xl shadow-sm border border-gray-200 dark:border-slate-800">
                 <div className="flex items-center gap-3">
@@ -129,7 +129,7 @@ function ContractContent() {
                 </div>
             </div>
 
-            <div className="max-w-[210mm] mx-auto">
+            <div className="max-w-[210mm] mx-auto print:max-w-none print:w-[210mm] print:m-0 print:p-0">
                 <ContractTemplate transaction={transaction} order={order} car={car} />
             </div>
         </div>

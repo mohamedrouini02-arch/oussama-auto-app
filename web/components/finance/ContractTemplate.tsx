@@ -24,52 +24,88 @@ export default function ContractTemplate({ transaction, order }: ContractTemplat
     const formattedDate = format(rawDate, 'dd/MM/yyyy')
 
     return (
-        <div className="relative mx-auto bg-white text-black font-sans shadow-lg print:shadow-none box-border dir-rtl" dir="rtl" id="legal-contract">
+        <div className="relative mx-auto bg-transparent text-black font-sans box-border dir-rtl" dir="rtl" id="legal-contract">
             <style jsx global>{`
                 @media print {
                     @page { 
                         size: A4 portrait; 
-                        margin: 12mm 15mm;
+                        margin: 0;
                     }
                     html, body {
+                        width: 210mm !important;
+                        height: auto !important;
                         background: white !important;
+                        color: black !important;
                         margin: 0 !important;
                         padding: 0 !important;
+                        overflow: visible !important;
                         -webkit-print-color-adjust: exact !important;
                         print-color-adjust: exact !important;
                     }
-                    body * {
-                        visibility: hidden;
+                    /* Force exact reproduction of colors, borders, fills */
+                    * {
+                        -webkit-print-color-adjust: exact !important;
+                        print-color-adjust: exact !important;
+                        color-adjust: exact !important;
                     }
-                    #legal-contract, #legal-contract * {
-                        visibility: visible;
+                    /* Hide UI elements */
+                    aside, nav, header, .print\\:hidden, .no-print, button {
+                        display: none !important;
                     }
-                    #legal-contract {
-                        position: absolute;
-                        left: 0;
-                        top: 0;
-                        width: 100% !important;
+                    /* Reset dashboard parent containers */
+                    #__next, [data-nextjs-scroll-focus-boundary], main, .min-h-screen {
                         margin: 0 !important;
                         padding: 0 !important;
-                        box-shadow: none !important;
+                        width: 210mm !important;
+                        max-width: 210mm !important;
+                        min-height: auto !important;
+                        height: auto !important;
+                        overflow: visible !important;
+                        position: static !important;
+                        transform: none !important;
                         background: white !important;
                     }
+                    #legal-contract {
+                        position: relative !important;
+                        left: auto !important;
+                        top: auto !important;
+                        width: 210mm !important;
+                        margin: 0 auto !important;
+                        padding: 0 !important;
+                        box-shadow: none !important;
+                        border: none !important;
+                        background: white !important;
+                        overflow: visible !important;
+                    }
                     .contract-page {
+                        width: 210mm !important;
+                        height: 297mm !important;
+                        min-height: 297mm !important;
+                        max-height: 297mm !important;
+                        padding: 14mm 16mm 10mm 16mm !important;
+                        margin: 0 !important;
+                        border: none !important;
+                        box-shadow: none !important;
+                        box-sizing: border-box !important;
+                        overflow: hidden !important;
+                        page-break-inside: avoid !important;
+                        break-inside: avoid !important;
                         page-break-after: always !important;
                         break-after: page !important;
-                        min-height: 275mm !important;
-                        height: 275mm !important;
-                        box-sizing: border-box !important;
+                        display: flex !important;
+                        flex-direction: column !important;
+                        justify-content: space-between !important;
+                        background: white !important;
                     }
-                    .contract-page:last-child {
-                        page-break-after: avoid !important;
-                        break-after: avoid !important;
+                    .contract-page-last {
+                        page-break-after: auto !important;
+                        break-after: auto !important;
                     }
                 }
             `}</style>
 
             {/* ================= PAGE 1 ================= */}
-            <div className="contract-page relative w-[210mm] min-h-[297mm] p-12 mx-auto border-b border-gray-200 print:border-none bg-white flex flex-col justify-between">
+            <div className="contract-page relative w-[210mm] min-h-[297mm] p-[14mm_16mm_10mm_16mm] mx-auto mb-8 border border-gray-200 print:border-none print:m-0 print:mb-0 shadow-lg print:shadow-none bg-white flex flex-col justify-between box-border">
                 <div>
                     {/* Header Logo */}
                     <div className="flex justify-center mb-6">
@@ -151,7 +187,7 @@ export default function ContractTemplate({ transaction, order }: ContractTemplat
             </div>
 
             {/* ================= PAGE 2 ================= */}
-            <div className="contract-page relative w-[210mm] min-h-[297mm] p-12 mx-auto border-b border-gray-200 print:border-none bg-white flex flex-col justify-between">
+            <div className="contract-page relative w-[210mm] min-h-[297mm] p-[14mm_16mm_10mm_16mm] mx-auto mb-8 border border-gray-200 print:border-none print:m-0 print:mb-0 shadow-lg print:shadow-none bg-white flex flex-col justify-between box-border">
                 <div>
                     <div className="flex justify-between items-center text-xs text-gray-500 mb-6 font-mono">
                         <span>04/01</span>
@@ -211,7 +247,7 @@ export default function ContractTemplate({ transaction, order }: ContractTemplat
             </div>
 
             {/* ================= PAGE 3 ================= */}
-            <div className="contract-page relative w-[210mm] min-h-[297mm] p-12 mx-auto border-b border-gray-200 print:border-none bg-white flex flex-col justify-between">
+            <div className="contract-page relative w-[210mm] min-h-[297mm] p-[14mm_16mm_10mm_16mm] mx-auto mb-8 border border-gray-200 print:border-none print:m-0 print:mb-0 shadow-lg print:shadow-none bg-white flex flex-col justify-between box-border">
                 <div>
                     <div className="flex justify-between items-center text-xs text-gray-500 mb-6 font-mono">
                         <span>04/02</span>
@@ -266,7 +302,7 @@ export default function ContractTemplate({ transaction, order }: ContractTemplat
             </div>
 
             {/* ================= PAGE 4 ================= */}
-            <div className="contract-page relative w-[210mm] min-h-[297mm] p-12 mx-auto bg-white flex flex-col justify-between">
+            <div className="contract-page contract-page-last relative w-[210mm] min-h-[297mm] p-[14mm_16mm_10mm_16mm] mx-auto border border-gray-200 print:border-none print:m-0 print:mb-0 shadow-lg print:shadow-none bg-white flex flex-col justify-between box-border">
                 <div>
                     <div className="flex justify-between items-center text-xs text-gray-500 mb-6 font-mono">
                         <span>04/03</span>
