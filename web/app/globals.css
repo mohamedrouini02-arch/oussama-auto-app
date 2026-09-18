@@ -154,11 +154,16 @@ html {
     padding: 0 !important;
   }
 
-  /* Reset main and generic sections without breaking fixed A4 pages */
+  /* Reset dashboard wrappers without breaking fixed A4 pages */
   main,
-  section {
+  section,
+  #__next,
+  body > div,
+  .min-h-screen {
     overflow: visible !important;
+    min-height: 0 !important;
     height: auto !important;
+    background: transparent !important;
   }
 
   /* Specific A4 Document Sheets: EXACT 210mm x 297mm bounds */
@@ -171,7 +176,6 @@ html {
     min-height: 297mm !important;
     max-height: 297mm !important;
     box-sizing: border-box !important;
-    overflow: hidden !important;
     page-break-inside: avoid !important;
     break-inside: avoid !important;
     background-color: white !important;
@@ -179,11 +183,13 @@ html {
   }
 
   .bon-de-commande-sheet {
+    overflow: visible !important;
     page-break-after: avoid !important;
     break-after: avoid !important;
   }
 
   .contract-page {
+    overflow: hidden !important;
     page-break-after: always !important;
     break-after: page !important;
   }
