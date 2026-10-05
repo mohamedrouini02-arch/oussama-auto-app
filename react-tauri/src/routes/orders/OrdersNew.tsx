@@ -26,79 +26,91 @@ export default function OrdersNew() {
         setLoading(true)
 
         try {
-            // Generate Reference Number
+            // Generate collision-resistant Reference Number
             const year = new Date().getFullYear()
-            const { data: latestOrder } = await (supabase.from('orders') as any)
-                .select('reference_number')
-                .ilike('reference_number', `WA-${year}-%`)
-                .order('created_at', { ascending: false })
-                .limit(1)
-                .single()
+            const generateRefCode = () => {
+                const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+                let code = ''
+                for (let i = 0; i < 6; i++) code += chars.charAt(Math.floor(Math.random() * chars.length))
+                return `WA-${year}-${code}`
+            }
 
-            let sequence = 1
-            if (latestOrder?.reference_number) {
-                const parts = latestOrder.reference_number.split('-')
-                if (parts.length === 3) {
-                    sequence = parseInt(parts[2]) + 1
+            // Retry loop to handle rare collisions on unique constraint
+            const MAX_RETRIES = 3
+            let lastError: any = null
+
+            for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
+                const referenceNumber = generateRefCode()
+
+                // Construct initial order_data for tracking system
+                const initialOrderData = {
+                    referenceNumber,
+                    status: 'pending',
+                    source: 'dashboard',
+                    createdAt: new Date().toISOString(),
+                    lastUpdated: new Date().toISOString(),
+                    displayDate: new Date().toLocaleDateString('ar-EG', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' }),
+                    customerInfo: {
+                        name: formData.customerName,
+                        phone: formData.customerPhone.replace(/\D/g, ''),
+                        email: formData.customerEmail,
+                        wilaya: formData.customerWilaya,
+                        idCard: formData.customerIdCard,
+                        whatsappPhone: `213${formData.customerPhone.replace(/\D/g, '').replace(/^0/, '')}`
+                    },
+                    carDetails: {
+                        brand: formData.carBrand,
+                        model: formData.carModel,
+                        budget: formData.budget,
+                        customBudget: formData.customBudget,
+                        brandDisplay: formData.carBrand,
+                        modelDisplay: `${formData.carBrand} ${formData.carModel}`,
+                        budgetDisplay: formData.budget ? `${formData.budget} DZD` : 'N/A'
+                    },
+                    notes: formData.notes,
+                    statusHistory: [
+                        {
+                            status: 'pending',
+                            timestamp: Date.now(),
+                            date: new Date().toLocaleDateString('ar-EG'),
+                            note: 'تم إنشاء الطلب من لوحة التحكم'
+                        }
+                    ]
                 }
+
+                const { error } = await supabase.from('orders').insert({
+                    customer_name: formData.customerName,
+                    customer_phone: formData.customerPhone.replace(/\D/g, ''),
+                    customer_email: formData.customerEmail,
+                    customer_wilaya: formData.customerWilaya,
+                    car_brand: formData.carBrand,
+                    car_model: formData.carModel,
+                    car_budget: formData.budget,
+                    car_custom_budget: formData.customBudget,
+                    notes: formData.notes,
+                    status: 'pending',
+                    reference_number: referenceNumber,
+                    order_data: initialOrderData,
+                    created_at: new Date().toISOString()
+                } as any)
+
+                if (!error) {
+                    navigate('/orders')
+                    return
+                }
+
+                // If it's a unique constraint violation (409), retry with a new reference
+                if (error.code === '23505' || (error as any).status === 409) {
+                    lastError = error
+                    continue
+                }
+
+                // Any other error, throw immediately
+                throw error
             }
 
-            const referenceNumber = `WA-${year}-${sequence.toString().padStart(6, '0')}`
-
-            // Construct initial order_data for tracking system
-            const initialOrderData = {
-                referenceNumber,
-                status: 'pending',
-                source: 'dashboard',
-                createdAt: new Date().toISOString(),
-                lastUpdated: new Date().toISOString(),
-                displayDate: new Date().toLocaleDateString('ar-EG', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' }),
-                customerInfo: {
-                    name: formData.customerName,
-                    phone: formData.customerPhone.replace(/\D/g, ''),
-                    email: formData.customerEmail,
-                    wilaya: formData.customerWilaya,
-                    idCard: formData.customerIdCard,
-                    whatsappPhone: `213${formData.customerPhone.replace(/\D/g, '').replace(/^0/, '')}`
-                },
-                carDetails: {
-                    brand: formData.carBrand,
-                    model: formData.carModel,
-                    budget: formData.budget,
-                    customBudget: formData.customBudget,
-                    brandDisplay: formData.carBrand, // Should ideally be translated/formatted
-                    modelDisplay: `${formData.carBrand} ${formData.carModel}`,
-                    budgetDisplay: formData.budget ? `${formData.budget} DZD` : 'N/A'
-                },
-                notes: formData.notes,
-                statusHistory: [
-                    {
-                        status: 'pending',
-                        timestamp: Date.now(),
-                        date: new Date().toLocaleDateString('ar-EG'),
-                        note: 'تم إنشاء الطلب من لوحة التحكم'
-                    }
-                ]
-            }
-
-            const { error } = await supabase.from('orders').insert({
-                customer_name: formData.customerName,
-                customer_phone: formData.customerPhone.replace(/\D/g, ''),
-                customer_email: formData.customerEmail,
-                customer_wilaya: formData.customerWilaya,
-                car_brand: formData.carBrand,
-                car_model: formData.carModel,
-                car_budget: formData.budget,
-                car_custom_budget: formData.customBudget,
-                notes: formData.notes,
-                status: 'pending',
-                reference_number: referenceNumber,
-                order_data: initialOrderData,
-                created_at: new Date().toISOString()
-            } as any)
-
-            if (error) throw error
-            navigate('/orders')
+            // All retries exhausted
+            throw lastError || new Error('Failed to create order after multiple attempts')
         } catch (error) {
             console.error('Error creating order:', error)
             alert('Failed to create order: ' + (error as any).message)
