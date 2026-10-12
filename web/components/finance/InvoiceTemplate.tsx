@@ -369,24 +369,23 @@ export default function InvoiceTemplate({ transaction, order, car }: InvoiceTemp
                             •NB: LE CLIENT EST TENU DE RESPECTER LES DELAIS DE PAIEMENT. EN CAS DE RETARD IL ASSUMERA LES FRAIS CONFERMEMENT AU CONTRAT CONCLU ENTRE LES DEUX PARTIES.
                         </p>
 
-
-                        <div className="pt-4 flex justify-between items-start">
+                        <div className="pt-4 space-y-4">
                             <div className="text-sm font-bold text-gray-900">
                                 <span>Le : </span>
                                 <span className="font-semibold" contentEditable suppressContentEditableWarning>{formattedDate}</span>
                                 <span className="ml-6">à : </span>
                                 <span className="font-semibold" contentEditable suppressContentEditableWarning>El-Milia</span>
                             </div>
-                        </div>
 
-                        <div className="pt-2 flex justify-between items-start px-4">
-                            <div className="text-center">
-                                <p className="font-extrabold text-sm uppercase mb-14">Signature du Client :</p>
-                                <div className="w-48 border-b-2 border-gray-800 border-dotted"></div>
-                            </div>
-                            <div className="text-center">
-                                <p className="font-extrabold text-sm uppercase mb-14">Signature du Vendeur :</p>
-                                <div className="w-48 border-b-2 border-gray-800 border-dotted"></div>
+                            <div className="flex justify-between items-start pt-2">
+                                <div className="text-center w-52">
+                                    <p className="font-extrabold text-sm uppercase mb-12">Signature du Client :</p>
+                                    <div className="w-full border-b-2 border-gray-800 border-dotted"></div>
+                                </div>
+                                <div className="text-center w-52">
+                                    <p className="font-extrabold text-sm uppercase mb-12">Signature du Vendeur :</p>
+                                    <div className="w-full border-b-2 border-gray-800 border-dotted"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
