@@ -378,23 +378,23 @@ export default function InvoiceTemplate({ transaction, order, car }: InvoiceTemp
                             </p>
 
                             {/* Date and Signatures */}
-                            <div className="pt-2">
-                                <div className="text-xs font-bold text-gray-900 mb-1">
+                            <div className="pt-6 mt-3">
+                                <div className="text-xs font-bold text-gray-900 mb-2">
                                     <span>Le : </span>
                                     <span className="font-semibold" contentEditable suppressContentEditableWarning>{formattedDate}</span>
                                     <span className="ml-6">à : </span>
                                     <span className="font-semibold" contentEditable suppressContentEditableWarning>El-Milia</span>
                                 </div>
 
-                                <div className="flex justify-between items-start pt-1.5 pb-1">
+                                <div className="flex justify-between items-start pt-2 pb-1">
                                     <div className="text-center w-56">
-                                        <p className="font-extrabold text-xs uppercase mb-1">Signature du Client :</p>
-                                        <div className="h-12"></div>
+                                        <p className="font-extrabold text-xs uppercase mb-2">Signature du Client :</p>
+                                        <div className="h-14"></div>
                                         <div className="w-full border-b-2 border-gray-800 border-dotted"></div>
                                     </div>
                                     <div className="text-center w-56">
-                                        <p className="font-extrabold text-xs uppercase mb-1">Signature du Vendeur :</p>
-                                        <div className="h-12"></div>
+                                        <p className="font-extrabold text-xs uppercase mb-2">Signature du Vendeur :</p>
+                                        <div className="h-14"></div>
                                         <div className="w-full border-b-2 border-gray-800 border-dotted"></div>
                                     </div>
                                 </div>
